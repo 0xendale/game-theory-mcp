@@ -14,4 +14,7 @@ pub use game::{
     MatrixForm, PayoffKind, Player, PlayerId, Outcome, Profile, Rational, StrategicGame,
     StrategyId, ValidStrategicGame,
 };
-pub use solve::{solve_dominance, DominanceMode, DominanceResult, EliminationStep};
+pub use solve::{
+    profitable_deviation, solve_dominance, solve_pure_nash, Deviation, DominanceMode,
+    DominanceResult, EliminationStep, ProfileCheck, PureNashResult,
+};

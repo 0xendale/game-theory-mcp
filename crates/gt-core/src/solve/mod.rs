@@ -2,5 +2,7 @@
 //! report carrying both the answer and the derivation that produced it.
 
 pub mod dominance;
+pub mod pure_nash;
 
 pub use dominance::{solve_dominance, DominanceMode, DominanceResult, EliminationStep};
+pub use pure_nash::{profitable_deviation, solve_pure_nash, Deviation, ProfileCheck, PureNashResult};
