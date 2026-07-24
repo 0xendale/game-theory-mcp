@@ -10,6 +10,6 @@ pub mod limits;
 
 pub use error::{Diagnostic, DiagnosticCode, GtError};
 pub use game::{
-    PayoffKind, Player, PlayerId, Outcome, Profile, Rational, StrategicGame, StrategyId,
-    ValidStrategicGame,
+    MatrixForm, PayoffKind, Player, PlayerId, Outcome, Profile, Rational, StrategicGame,
+    StrategyId, ValidStrategicGame,
 };

@@ -2,7 +2,9 @@
 
 use serde::{Deserialize, Serialize};
 
+pub mod matrix_form;
 pub mod validate;
+pub use matrix_form::MatrixForm;
 pub use validate::ValidStrategicGame;
 
 /// Index into `StrategicGame::players`.
