@@ -2,6 +2,9 @@
 
 use serde::{Deserialize, Serialize};
 
+pub mod validate;
+pub use validate::ValidStrategicGame;
+
 /// Index into `StrategicGame::players`.
 pub type PlayerId = usize;
 
