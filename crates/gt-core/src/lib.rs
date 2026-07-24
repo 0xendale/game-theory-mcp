@@ -7,9 +7,11 @@
 pub mod error;
 pub mod game;
 pub mod limits;
+pub mod solve;
 
 pub use error::{Diagnostic, DiagnosticCode, GtError};
 pub use game::{
     MatrixForm, PayoffKind, Player, PlayerId, Outcome, Profile, Rational, StrategicGame,
     StrategyId, ValidStrategicGame,
 };
+pub use solve::{solve_dominance, DominanceMode, DominanceResult, EliminationStep};
