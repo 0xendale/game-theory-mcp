@@ -15,15 +15,19 @@ pub enum LinearSolution {
     Infinite,
 }
 
-/// Solve `a x = b`. `a` is row-major; `a.len()` must equal `b.len()`.
+/// Solve `a x = b`. `a` is row-major.
+///
+/// Precondition (caller must uphold): `a` is rectangular and `a.len() == b.len()`.
+/// This is checked with `debug_assert!` in debug builds only; release builds do
+/// not validate shape and will misbehave if the caller violates it.
 pub fn solve_linear_system(mut a: Vec<Vec<Rational>>, mut b: Vec<Rational>) -> LinearSolution {
     let rows = a.len();
-    assert_eq!(rows, b.len(), "coefficient rows and constants must match");
+    debug_assert_eq!(rows, b.len(), "coefficient rows and constants must match");
     if rows == 0 {
         return LinearSolution::Infinite;
     }
     let cols = a[0].len();
-    assert!(
+    debug_assert!(
         a.iter().all(|row| row.len() == cols),
         "coefficient matrix must be rectangular"
     );
