@@ -4,12 +4,16 @@
 //! [`game::ValidStrategicGame::validate`] and every solver takes that type,
 //! so an unchecked game cannot reach a solver.
 
+pub mod analyze;
 pub mod error;
 pub mod exact;
 pub mod game;
 pub mod limits;
 pub mod solve;
 
+pub use analyze::{
+    analyze_structure, pareto_dominates, DominatedEquilibrium, SecurityLevel, StructureReport,
+};
 pub use error::{Diagnostic, DiagnosticCode, GtError};
 pub use exact::{solve_linear_system, LinearSolution};
 pub use game::{
