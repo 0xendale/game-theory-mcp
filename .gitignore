@@ -1,0 +1,18 @@
+# Source material. Contents already transcribed under docs/reference/.
+# game_theory.pdf is third-party CC BY-NC-ND — never commit, never link
+# to the local copy from docs. See CLAUDE.md.
+game_theory.pdf
+Game_Theory_MCP_Server_Specification_EN.pdf
+
+# Agent tooling state and local instructions
+.omc/
+.claude/settings.local.json
+CLAUDE.md
+docs/superpowers/
+
+# Rust
+/target/
+**/*.rs.bk
+
+# OS
+.DS_Store
