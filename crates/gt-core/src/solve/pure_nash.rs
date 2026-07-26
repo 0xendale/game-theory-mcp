@@ -116,10 +116,7 @@ mod tests {
         let pd = game(
             vec!["Cooperate", "Defect"],
             vec!["Cooperate", "Defect"],
-            vec![
-                vec![[3.0, 3.0], [0.0, 4.0]],
-                vec![[4.0, 0.0], [1.0, 1.0]],
-            ],
+            vec![vec![[3.0, 3.0], [0.0, 4.0]], vec![[4.0, 0.0], [1.0, 1.0]]],
         );
         let result = solve_pure_nash(&pd);
         assert_eq!(result.equilibria, vec![vec![1, 1]]);
@@ -130,10 +127,7 @@ mod tests {
         let bos = game(
             vec!["Opera", "Football"],
             vec!["Opera", "Football"],
-            vec![
-                vec![[2.0, 1.0], [0.0, 0.0]],
-                vec![[0.0, 0.0], [1.0, 2.0]],
-            ],
+            vec![vec![[2.0, 1.0], [0.0, 0.0]], vec![[0.0, 0.0], [1.0, 2.0]]],
         );
         let result = solve_pure_nash(&bos);
         assert_eq!(result.equilibria, vec![vec![0, 0], vec![1, 1]]);
@@ -163,10 +157,7 @@ mod tests {
         let pd = game(
             vec!["Cooperate", "Defect"],
             vec!["Cooperate", "Defect"],
-            vec![
-                vec![[3.0, 3.0], [0.0, 4.0]],
-                vec![[4.0, 0.0], [1.0, 1.0]],
-            ],
+            vec![vec![[3.0, 3.0], [0.0, 4.0]], vec![[4.0, 0.0], [1.0, 1.0]]],
         );
         let result = solve_pure_nash(&pd);
         let cc = result
@@ -198,7 +189,10 @@ mod tests {
         }
         let g = ValidStrategicGame::validate(StrategicGame {
             players: (0..3)
-                .map(|id| crate::game::Player { id, name: format!("P{id}") })
+                .map(|id| crate::game::Player {
+                    id,
+                    name: format!("P{id}"),
+                })
                 .collect(),
             strategies: vec![vec!["A".into(), "B".into()]; 3],
             outcomes,
@@ -215,10 +209,7 @@ mod tests {
         let g = game(
             vec!["T", "B"],
             vec!["L", "R"],
-            vec![
-                vec![[0.0, 0.0], [0.0, 0.0]],
-                vec![[5.0, 0.0], [0.0, 0.0]],
-            ],
+            vec![vec![[0.0, 0.0], [0.0, 0.0]], vec![[5.0, 0.0], [0.0, 0.0]]],
         );
         let dev = profitable_deviation(&g, &[0, 0], 0).expect("Row can improve");
         assert_eq!(dev.to, 1);

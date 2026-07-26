@@ -70,7 +70,10 @@ impl GtError {
     /// Convenience for the common single-diagnostic case.
     pub fn invalid(code: DiagnosticCode, message: impl Into<String>) -> Self {
         GtError::InvalidGame {
-            diagnostics: vec![Diagnostic { code, message: message.into() }],
+            diagnostics: vec![Diagnostic {
+                code,
+                message: message.into(),
+            }],
         }
     }
 }

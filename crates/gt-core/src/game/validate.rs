@@ -96,9 +96,7 @@ impl ValidStrategicGame {
                 if set[..i].contains(&set[i]) {
                     diagnostics.push(Diagnostic {
                         code: DiagnosticCode::DuplicateStrategyLabel,
-                        message: format!(
-                            "player {p} has two strategies labelled {:?}", set[i]
-                        ),
+                        message: format!("player {p} has two strategies labelled {:?}", set[i]),
                     });
                 }
             }
@@ -201,7 +199,11 @@ impl ValidStrategicGame {
             .map(|slot| slot.expect("validated above: every profile is filled"))
             .collect();
 
-        Ok(ValidStrategicGame { game, payoffs, strides })
+        Ok(ValidStrategicGame {
+            game,
+            payoffs,
+            strides,
+        })
     }
 
     pub fn n_players(&self) -> usize {
@@ -264,7 +266,11 @@ fn compute_strides(strategies: &[Vec<String>]) -> Vec<usize> {
 }
 
 fn linear_index(profile: &[StrategyId], strides: &[usize]) -> usize {
-    profile.iter().zip(strides).map(|(s, stride)| s * stride).sum()
+    profile
+        .iter()
+        .zip(strides)
+        .map(|(s, stride)| s * stride)
+        .sum()
 }
 
 fn profile_from_index(mut idx: usize, strides: &[usize], strategies: &[Vec<String>]) -> Profile {
@@ -288,18 +294,33 @@ mod tests {
     fn two_by_two(payoffs: [[f64; 2]; 4]) -> StrategicGame {
         StrategicGame {
             players: vec![
-                Player { id: 0, name: "Row".into() },
-                Player { id: 1, name: "Col".into() },
+                Player {
+                    id: 0,
+                    name: "Row".into(),
+                },
+                Player {
+                    id: 1,
+                    name: "Col".into(),
+                },
             ],
-            strategies: vec![
-                vec!["T".into(), "B".into()],
-                vec!["L".into(), "R".into()],
-            ],
+            strategies: vec![vec!["T".into(), "B".into()], vec!["L".into(), "R".into()]],
             outcomes: vec![
-                Outcome { profile: vec![0, 0], payoffs: payoffs[0].to_vec() },
-                Outcome { profile: vec![0, 1], payoffs: payoffs[1].to_vec() },
-                Outcome { profile: vec![1, 0], payoffs: payoffs[2].to_vec() },
-                Outcome { profile: vec![1, 1], payoffs: payoffs[3].to_vec() },
+                Outcome {
+                    profile: vec![0, 0],
+                    payoffs: payoffs[0].to_vec(),
+                },
+                Outcome {
+                    profile: vec![0, 1],
+                    payoffs: payoffs[1].to_vec(),
+                },
+                Outcome {
+                    profile: vec![1, 0],
+                    payoffs: payoffs[2].to_vec(),
+                },
+                Outcome {
+                    profile: vec![1, 1],
+                    payoffs: payoffs[3].to_vec(),
+                },
             ],
             payoff_kind: PayoffKind::Cardinal,
         }
@@ -307,9 +328,7 @@ mod tests {
 
     fn codes(err: &GtError) -> Vec<DiagnosticCode> {
         match err {
-            GtError::InvalidGame { diagnostics } => {
-                diagnostics.iter().map(|d| d.code).collect()
-            }
+            GtError::InvalidGame { diagnostics } => diagnostics.iter().map(|d| d.code).collect(),
             other => panic!("expected InvalidGame, got {other:?}"),
         }
     }
@@ -317,7 +336,10 @@ mod tests {
     #[test]
     fn a_well_formed_game_validates() {
         let g = ValidStrategicGame::validate(two_by_two([
-            [3.0, 3.0], [0.0, 4.0], [4.0, 0.0], [1.0, 1.0],
+            [3.0, 3.0],
+            [0.0, 4.0],
+            [4.0, 0.0],
+            [1.0, 1.0],
         ]))
         .expect("valid");
         assert_eq!(g.n_players(), 2);
@@ -328,7 +350,10 @@ mod tests {
     #[test]
     fn payoffs_are_looked_up_by_profile() {
         let g = ValidStrategicGame::validate(two_by_two([
-            [3.0, 3.0], [0.0, 4.0], [4.0, 0.0], [1.0, 1.0],
+            [3.0, 3.0],
+            [0.0, 4.0],
+            [4.0, 0.0],
+            [1.0, 1.0],
         ]))
         .expect("valid");
         assert_eq!(*g.payoff(&[1, 0], 0), Rational::from_integer(4.into()));
@@ -340,7 +365,10 @@ mod tests {
     fn fractional_payoffs_convert_exactly() {
         // 0.5 is exactly representable in binary, so this must be exactly 1/2.
         let g = ValidStrategicGame::validate(two_by_two([
-            [0.5, 0.0], [0.0, 0.0], [0.0, 0.0], [0.0, 0.0],
+            [0.5, 0.0],
+            [0.0, 0.0],
+            [0.0, 0.0],
+            [0.0, 0.0],
         ]))
         .expect("valid");
         let half = Rational::new(1.into(), 2.into());
@@ -350,7 +378,10 @@ mod tests {
     #[test]
     fn profiles_enumerates_every_combination_once() {
         let g = ValidStrategicGame::validate(two_by_two([
-            [1.0, 1.0], [1.0, 1.0], [1.0, 1.0], [1.0, 1.0],
+            [1.0, 1.0],
+            [1.0, 1.0],
+            [1.0, 1.0],
+            [1.0, 1.0],
         ]))
         .expect("valid");
         let all: Vec<_> = g.profiles().collect();
@@ -414,13 +445,25 @@ mod tests {
     fn too_many_players_names_the_limit_and_the_actual_value() {
         let n = crate::limits::MAX_PLAYERS + 1;
         let game = StrategicGame {
-            players: (0..n).map(|id| Player { id, name: format!("P{id}") }).collect(),
+            players: (0..n)
+                .map(|id| Player {
+                    id,
+                    name: format!("P{id}"),
+                })
+                .collect(),
             strategies: vec![vec!["a".into()]; n],
-            outcomes: vec![Outcome { profile: vec![0; n], payoffs: vec![0.0; n] }],
+            outcomes: vec![Outcome {
+                profile: vec![0; n],
+                payoffs: vec![0.0; n],
+            }],
             payoff_kind: PayoffKind::Cardinal,
         };
         match ValidStrategicGame::validate(game) {
-            Err(GtError::GameTooLarge { field, limit, actual }) => {
+            Err(GtError::GameTooLarge {
+                field,
+                limit,
+                actual,
+            }) => {
                 assert_eq!(field, "players");
                 assert_eq!(limit, crate::limits::MAX_PLAYERS);
                 assert_eq!(actual, n);

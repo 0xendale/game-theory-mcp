@@ -11,5 +11,7 @@ pub use mixed_nash::{
     expected_payoff_per_strategy, solve_mixed_nash, MixedEquilibrium, MixedNashResult,
     MixedStrategy,
 };
-pub use pure_nash::{profitable_deviation, solve_pure_nash, Deviation, ProfileCheck, PureNashResult};
+pub use pure_nash::{
+    profitable_deviation, solve_pure_nash, Deviation, ProfileCheck, PureNashResult,
+};
 pub use verify::{verify_equilibrium, Concept, VerifyResult};

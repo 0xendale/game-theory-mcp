@@ -137,7 +137,10 @@ mod tests {
         // x + y = 1, 2x + 2y = 2
         let a = vec![vec![int(1), int(1)], vec![int(2), int(2)]];
         let b = vec![int(1), int(2)];
-        assert!(matches!(solve_linear_system(a, b), LinearSolution::Infinite));
+        assert!(matches!(
+            solve_linear_system(a, b),
+            LinearSolution::Infinite
+        ));
     }
 
     #[test]
@@ -156,6 +159,9 @@ mod tests {
         let a = vec![vec![int(1), int(1)]];
         let b = vec![int(1)];
         // One equation, two unknowns.
-        assert!(matches!(solve_linear_system(a, b), LinearSolution::Infinite));
+        assert!(matches!(
+            solve_linear_system(a, b),
+            LinearSolution::Infinite
+        ));
     }
 }

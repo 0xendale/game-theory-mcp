@@ -58,8 +58,14 @@ impl TryFrom<MatrixForm> for StrategicGame {
         let [row_name, col_name] = m.players;
         Ok(StrategicGame {
             players: vec![
-                Player { id: 0, name: row_name },
-                Player { id: 1, name: col_name },
+                Player {
+                    id: 0,
+                    name: row_name,
+                },
+                Player {
+                    id: 1,
+                    name: col_name,
+                },
             ],
             strategies: vec![m.row_strategies, m.col_strategies],
             outcomes,
@@ -71,19 +77,16 @@ impl TryFrom<MatrixForm> for StrategicGame {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::game::{PayoffKind, ValidStrategicGame};
     use crate::error::DiagnosticCode;
     use crate::game::Rational;
+    use crate::game::{PayoffKind, ValidStrategicGame};
 
     fn pd_matrix() -> MatrixForm {
         MatrixForm {
             players: ["Row".into(), "Col".into()],
             row_strategies: vec!["Cooperate".into(), "Defect".into()],
             col_strategies: vec!["Cooperate".into(), "Defect".into()],
-            payoff_matrix: vec![
-                vec![[3.0, 3.0], [0.0, 4.0]],
-                vec![[4.0, 0.0], [1.0, 1.0]],
-            ],
+            payoff_matrix: vec![vec![[3.0, 3.0], [0.0, 4.0]], vec![[4.0, 0.0], [1.0, 1.0]]],
             payoff_kind: PayoffKind::Cardinal,
         }
     }

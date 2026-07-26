@@ -38,8 +38,9 @@ pub struct DominanceResult {
 
 pub fn solve_dominance(game: &ValidStrategicGame, mode: DominanceMode) -> DominanceResult {
     let n = game.n_players();
-    let mut surviving: Vec<Vec<StrategyId>> =
-        (0..n).map(|p| (0..game.n_strategies(p)).collect()).collect();
+    let mut surviving: Vec<Vec<StrategyId>> = (0..n)
+        .map(|p| (0..game.n_strategies(p)).collect())
+        .collect();
     let mut steps = Vec::new();
     let mut round = 0usize;
 
@@ -194,10 +195,7 @@ mod tests {
         game(
             vec!["Cooperate", "Defect"],
             vec!["Cooperate", "Defect"],
-            vec![
-                vec![[3.0, 3.0], [0.0, 4.0]],
-                vec![[4.0, 0.0], [1.0, 1.0]],
-            ],
+            vec![vec![[3.0, 3.0], [0.0, 4.0]], vec![[4.0, 0.0], [1.0, 1.0]]],
         )
     }
 
@@ -244,14 +242,14 @@ mod tests {
         let g = game(
             vec!["T", "B"],
             vec!["L", "R"],
-            vec![
-                vec![[2.0, 3.0], [4.0, 2.0]],
-                vec![[3.0, 3.0], [1.0, 1.0]],
-            ],
+            vec![vec![[2.0, 3.0], [4.0, 2.0]], vec![[3.0, 3.0], [1.0, 1.0]]],
         );
         let result = solve_dominance(&g, DominanceMode::Strict);
         // Col: L gives 3,3 vs R giving 2,1 — L strictly dominates R.
-        assert!(result.steps.iter().any(|s| s.player == 1 && s.eliminated == 1));
+        assert!(result
+            .steps
+            .iter()
+            .any(|s| s.player == 1 && s.eliminated == 1));
         // With R gone, Row compares T=2 against B=3 — B strictly dominates T.
         assert!(result
             .steps
@@ -265,10 +263,7 @@ mod tests {
         let g = game(
             vec!["T", "B"],
             vec!["L", "R"],
-            vec![
-                vec![[1.0, 1.0], [1.0, 0.0]],
-                vec![[0.0, 1.0], [1.0, 1.0]],
-            ],
+            vec![vec![[1.0, 1.0], [1.0, 0.0]], vec![[0.0, 1.0], [1.0, 1.0]]],
         );
         let result = solve_dominance(&g, DominanceMode::Weak);
         assert!(
@@ -283,16 +278,16 @@ mod tests {
         let g = game(
             vec!["T", "B"],
             vec!["L", "R"],
-            vec![
-                vec![[1.0, 0.0], [2.0, 0.0]],
-                vec![[1.0, 0.0], [0.0, 0.0]],
-            ],
+            vec![vec![[1.0, 0.0], [2.0, 0.0]], vec![[1.0, 0.0], [0.0, 0.0]]],
         );
         let strict = solve_dominance(&g, DominanceMode::Strict);
         assert!(strict.steps.is_empty(), "no strict dominance here");
 
         let weak = solve_dominance(&g, DominanceMode::Weak);
-        assert!(weak.steps.iter().any(|s| s.player == 0 && s.eliminated == 1));
+        assert!(weak
+            .steps
+            .iter()
+            .any(|s| s.player == 0 && s.eliminated == 1));
     }
 
     #[test]
@@ -302,10 +297,7 @@ mod tests {
             players: ["Row".into(), "Col".into()],
             row_strategies: vec!["C".into(), "D".into()],
             col_strategies: vec!["C".into(), "D".into()],
-            payoff_matrix: vec![
-                vec![[3.0, 3.0], [0.0, 4.0]],
-                vec![[4.0, 0.0], [1.0, 1.0]],
-            ],
+            payoff_matrix: vec![vec![[3.0, 3.0], [0.0, 4.0]], vec![[4.0, 0.0], [1.0, 1.0]]],
             payoff_kind: PayoffKind::Ordinal,
         };
         let g = ValidStrategicGame::validate(StrategicGame::try_from(form).unwrap()).unwrap();

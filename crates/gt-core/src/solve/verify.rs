@@ -56,14 +56,18 @@ pub fn verify_equilibrium(
                 None
             } else {
                 Some(match &dominance.unique_profile {
-                    Some(other) => format!(
-                        "iterated strict dominance yields {other:?}, not {profile:?}"
-                    ),
-                    None => "no player has a strictly dominant strategy in this game"
-                        .to_string(),
+                    Some(other) => {
+                        format!("iterated strict dominance yields {other:?}, not {profile:?}")
+                    }
+                    None => "no player has a strictly dominant strategy in this game".to_string(),
                 })
             };
-            Ok(VerifyResult { holds, concept, deviations, note })
+            Ok(VerifyResult {
+                holds,
+                concept,
+                deviations,
+                note,
+            })
         }
     }
 }
@@ -96,10 +100,7 @@ mod tests {
             players: ["Row".into(), "Col".into()],
             row_strategies: vec!["Cooperate".into(), "Defect".into()],
             col_strategies: vec!["Cooperate".into(), "Defect".into()],
-            payoff_matrix: vec![
-                vec![[3.0, 3.0], [0.0, 4.0]],
-                vec![[4.0, 0.0], [1.0, 1.0]],
-            ],
+            payoff_matrix: vec![vec![[3.0, 3.0], [0.0, 4.0]], vec![[4.0, 0.0], [1.0, 1.0]]],
             payoff_kind: PayoffKind::Cardinal,
         };
         ValidStrategicGame::validate(StrategicGame::try_from(form).unwrap()).unwrap()
@@ -118,7 +119,11 @@ mod tests {
         assert!(!result.holds);
         assert_eq!(result.deviations.len(), 2, "both players can profit");
 
-        let row = result.deviations.iter().find(|d| d.player == 0).expect("row");
+        let row = result
+            .deviations
+            .iter()
+            .find(|d| d.player == 0)
+            .expect("row");
         assert_eq!(row.from, 0);
         assert_eq!(row.to, 1);
         assert_eq!(row.gain, Rational::from_integer(1.into()));
@@ -139,17 +144,17 @@ mod tests {
             players: ["Row".into(), "Col".into()],
             row_strategies: vec!["Opera".into(), "Football".into()],
             col_strategies: vec!["Opera".into(), "Football".into()],
-            payoff_matrix: vec![
-                vec![[2.0, 1.0], [0.0, 0.0]],
-                vec![[0.0, 0.0], [1.0, 2.0]],
-            ],
+            payoff_matrix: vec![vec![[2.0, 1.0], [0.0, 0.0]], vec![[0.0, 0.0], [1.0, 2.0]]],
             payoff_kind: PayoffKind::Cardinal,
         };
         let bos = ValidStrategicGame::validate(StrategicGame::try_from(form).unwrap()).unwrap();
 
-        assert!(verify_equilibrium(&bos, &[0, 0], Concept::PureNash).unwrap().holds);
-        let dominant =
-            verify_equilibrium(&bos, &[0, 0], Concept::DominantStrategy).unwrap();
+        assert!(
+            verify_equilibrium(&bos, &[0, 0], Concept::PureNash)
+                .unwrap()
+                .holds
+        );
+        let dominant = verify_equilibrium(&bos, &[0, 0], Concept::DominantStrategy).unwrap();
         assert!(!dominant.holds);
         assert!(dominant.note.is_some(), "should explain what failed");
     }

@@ -61,18 +61,36 @@ mod tests {
     fn prisoners_dilemma() -> StrategicGame {
         StrategicGame {
             players: vec![
-                Player { id: 0, name: "Row".into() },
-                Player { id: 1, name: "Col".into() },
+                Player {
+                    id: 0,
+                    name: "Row".into(),
+                },
+                Player {
+                    id: 1,
+                    name: "Col".into(),
+                },
             ],
             strategies: vec![
                 vec!["Cooperate".into(), "Defect".into()],
                 vec!["Cooperate".into(), "Defect".into()],
             ],
             outcomes: vec![
-                Outcome { profile: vec![0, 0], payoffs: vec![3.0, 3.0] },
-                Outcome { profile: vec![0, 1], payoffs: vec![0.0, 4.0] },
-                Outcome { profile: vec![1, 0], payoffs: vec![4.0, 0.0] },
-                Outcome { profile: vec![1, 1], payoffs: vec![1.0, 1.0] },
+                Outcome {
+                    profile: vec![0, 0],
+                    payoffs: vec![3.0, 3.0],
+                },
+                Outcome {
+                    profile: vec![0, 1],
+                    payoffs: vec![0.0, 4.0],
+                },
+                Outcome {
+                    profile: vec![1, 0],
+                    payoffs: vec![4.0, 0.0],
+                },
+                Outcome {
+                    profile: vec![1, 1],
+                    payoffs: vec![1.0, 1.0],
+                },
             ],
             payoff_kind: PayoffKind::Cardinal,
         }

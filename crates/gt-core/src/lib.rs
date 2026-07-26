@@ -13,7 +13,7 @@ pub mod solve;
 pub use error::{Diagnostic, DiagnosticCode, GtError};
 pub use exact::{solve_linear_system, LinearSolution};
 pub use game::{
-    MatrixForm, PayoffKind, Player, PlayerId, Outcome, Profile, Rational, StrategicGame,
+    MatrixForm, Outcome, PayoffKind, Player, PlayerId, Profile, Rational, StrategicGame,
     StrategyId, ValidStrategicGame,
 };
 pub use solve::{

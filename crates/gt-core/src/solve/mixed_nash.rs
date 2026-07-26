@@ -41,7 +41,9 @@ pub struct MixedNashResult {
 
 pub fn solve_mixed_nash(game: &ValidStrategicGame) -> Result<MixedNashResult, GtError> {
     if game.n_players() != 2 {
-        return Err(GtError::NPlayerMixedUnsupported { players: game.n_players() });
+        return Err(GtError::NPlayerMixedUnsupported {
+            players: game.n_players(),
+        });
     }
     game.require_cardinal("solve_mixed_nash")?;
 
@@ -81,7 +83,11 @@ pub fn solve_mixed_nash(game: &ValidStrategicGame) -> Result<MixedNashResult, Gt
             .to_string()
     });
 
-    Ok(MixedNashResult { equilibria, degenerate, warning })
+    Ok(MixedNashResult {
+        equilibria,
+        degenerate,
+        warning,
+    })
 }
 
 /// Outcome of solving one player's indifference system for a candidate
@@ -148,7 +154,13 @@ fn try_support_pair(
         })
         .collect();
 
-    (Some(MixedEquilibrium { expected_payoffs, ..eq }), saw_underdetermined)
+    (
+        Some(MixedEquilibrium {
+            expected_payoffs,
+            ..eq
+        }),
+        saw_underdetermined,
+    )
 }
 
 /// Find the mixture the *opponent* must play to leave `player` indifferent
@@ -172,7 +184,11 @@ fn solve_opponent_mix(
     for &own in player_support {
         let mut row = Vec::with_capacity(unknowns);
         for &opp in opponent_support {
-            let profile = if player == 0 { vec![own, opp] } else { vec![opp, own] };
+            let profile = if player == 0 {
+                vec![own, opp]
+            } else {
+                vec![opp, own]
+            };
             row.push(game.payoff(&profile, player).clone());
         }
         row.push(-Rational::one()); // coefficient on u
@@ -220,7 +236,11 @@ pub fn expected_payoff_per_strategy(
                 if weight.is_zero() {
                     continue;
                 }
-                let profile = if player == 0 { vec![own, opp] } else { vec![opp, own] };
+                let profile = if player == 0 {
+                    vec![own, opp]
+                } else {
+                    vec![opp, own]
+                };
                 total += weight * game.payoff(&profile, player);
             }
             total
@@ -239,8 +259,16 @@ fn is_degenerate(game: &ValidStrategicGame) -> bool {
         for a in 0..own_count {
             for b in (a + 1)..own_count {
                 let identical = (0..opp_count).all(|opp| {
-                    let pa = if player == 0 { vec![a, opp] } else { vec![opp, a] };
-                    let pb = if player == 0 { vec![b, opp] } else { vec![opp, b] };
+                    let pa = if player == 0 {
+                        vec![a, opp]
+                    } else {
+                        vec![opp, a]
+                    };
+                    let pb = if player == 0 {
+                        vec![b, opp]
+                    } else {
+                        vec![opp, b]
+                    };
                     game.payoff(&pa, player) == game.payoff(&pb, player)
                 });
                 if identical {
@@ -329,10 +357,7 @@ mod tests {
     fn battle_of_the_sexes_has_three_equilibria_two_pure_and_one_mixed() {
         // Row prefers (Opera, Opera) = (2,1); Col prefers (Football, Football) = (1,2).
         let bos = game(
-            vec![
-                vec![[2.0, 1.0], [0.0, 0.0]],
-                vec![[0.0, 0.0], [1.0, 2.0]],
-            ],
+            vec![vec![[2.0, 1.0], [0.0, 0.0]], vec![[0.0, 0.0], [1.0, 2.0]]],
             PayoffKind::Cardinal,
         );
         let result = solve_mixed_nash(&bos).expect("2-player cardinal");
@@ -351,25 +376,22 @@ mod tests {
     #[test]
     fn pure_equilibria_appear_as_singleton_support_equilibria() {
         let pd = game(
-            vec![
-                vec![[3.0, 3.0], [0.0, 4.0]],
-                vec![[4.0, 0.0], [1.0, 1.0]],
-            ],
+            vec![vec![[3.0, 3.0], [0.0, 4.0]], vec![[4.0, 0.0], [1.0, 1.0]]],
             PayoffKind::Cardinal,
         );
         let result = solve_mixed_nash(&pd).expect("2-player cardinal");
         assert_eq!(result.equilibria.len(), 1);
         assert_eq!(result.equilibria[0].supports, vec![vec![1], vec![1]]);
-        assert_eq!(result.equilibria[0].strategies[0].probs, vec![int(0), int(1)]);
+        assert_eq!(
+            result.equilibria[0].strategies[0].probs,
+            vec![int(0), int(1)]
+        );
     }
 
     #[test]
     fn every_reported_equilibrium_satisfies_the_indifference_condition() {
         let bos = game(
-            vec![
-                vec![[2.0, 1.0], [0.0, 0.0]],
-                vec![[0.0, 0.0], [1.0, 2.0]],
-            ],
+            vec![vec![[2.0, 1.0], [0.0, 0.0]], vec![[0.0, 0.0], [1.0, 2.0]]],
             PayoffKind::Cardinal,
         );
         let result = solve_mixed_nash(&bos).expect("2-player cardinal");
@@ -426,7 +448,12 @@ mod tests {
             }
         }
         let g = ValidStrategicGame::validate(StrategicGame {
-            players: (0..3).map(|id| Player { id, name: format!("P{id}") }).collect(),
+            players: (0..3)
+                .map(|id| Player {
+                    id,
+                    name: format!("P{id}"),
+                })
+                .collect(),
             strategies: vec![vec!["A".into(), "B".into()]; 3],
             outcomes,
             payoff_kind: PayoffKind::Cardinal,
@@ -444,10 +471,7 @@ mod tests {
         // All payoffs equal: every mixture is an equilibrium, so the
         // equal-support enumeration cannot be complete.
         let flat = game(
-            vec![
-                vec![[1.0, 1.0], [1.0, 1.0]],
-                vec![[1.0, 1.0], [1.0, 1.0]],
-            ],
+            vec![vec![[1.0, 1.0], [1.0, 1.0]], vec![[1.0, 1.0], [1.0, 1.0]]],
             PayoffKind::Cardinal,
         );
         let result = solve_mixed_nash(&flat).expect("2-player cardinal");
@@ -479,7 +503,13 @@ mod tests {
             PayoffKind::Cardinal,
         );
         let result = solve_mixed_nash(&g).expect("2-player cardinal");
-        assert!(result.degenerate, "underdetermined support must set degenerate = true");
-        assert!(result.warning.is_some(), "degenerate result must carry a warning");
+        assert!(
+            result.degenerate,
+            "underdetermined support must set degenerate = true"
+        );
+        assert!(
+            result.warning.is_some(),
+            "degenerate result must carry a warning"
+        );
     }
 }
