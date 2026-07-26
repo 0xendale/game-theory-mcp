@@ -1,8 +1,36 @@
 //! Exact game-theoretic computation.
 //!
-//! No I/O, no async, no protocol handling. Games are validated once via
-//! [`game::ValidStrategicGame::validate`] and every solver takes that type,
-//! so an unchecked game cannot reach a solver.
+//! No I/O, no async, no protocol handling. A caller-supplied [`StrategicGame`]
+//! passes through [`ValidStrategicGame::validate`] once; every solver takes
+//! that type, so an unchecked game cannot reach a solver.
+//!
+//! Payoffs cross the API as `f64` but are stored and computed as exact
+//! rationals, so there is no tolerance anywhere and answers match published
+//! textbook solutions exactly.
+//!
+//! ```
+//! use gt_core::game::{MatrixForm, PayoffKind, StrategicGame, ValidStrategicGame};
+//! use gt_core::solve::pure_nash::solve_pure_nash;
+//!
+//! let matrix = MatrixForm {
+//!     players: ["Row".into(), "Col".into()],
+//!     row_strategies: vec!["Cooperate".into(), "Defect".into()],
+//!     col_strategies: vec!["Cooperate".into(), "Defect".into()],
+//!     payoff_matrix: vec![
+//!         vec![[3.0, 3.0], [0.0, 4.0]],
+//!         vec![[4.0, 0.0], [1.0, 1.0]],
+//!     ],
+//!     payoff_kind: PayoffKind::Cardinal,
+//! };
+//!
+//! let game = ValidStrategicGame::validate(StrategicGame::try_from(matrix)?)?;
+//! let result = solve_pure_nash(&game);
+//!
+//! // Both players defect: the unique equilibrium, and worse for both than
+//! // mutual cooperation.
+//! assert_eq!(result.equilibria, vec![vec![1, 1]]);
+//! # Ok::<(), gt_core::GtError>(())
+//! ```
 
 pub mod analyze;
 pub mod error;
