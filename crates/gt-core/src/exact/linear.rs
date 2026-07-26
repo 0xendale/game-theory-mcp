@@ -50,18 +50,19 @@ pub fn solve_linear_system(mut a: Vec<Vec<Rational>>, mut b: Vec<Rational>) -> L
         }
         b[pivot_row] /= &pivot;
 
-        // Clear this column everywhere else.
+        // Clear this column everywhere else. The pivot row is lifted out so the
+        // elimination can borrow each target row mutably while still reading it.
+        let pivot_values = a[pivot_row].clone();
+        let pivot_constant = b[pivot_row].clone();
         for r in 0..rows {
             if r == pivot_row || a[r][col].is_zero() {
                 continue;
             }
             let factor = a[r][col].clone();
-            for c in 0..cols {
-                let subtract = &factor * &a[pivot_row][c];
-                a[r][c] -= subtract;
+            for (entry, pivot_entry) in a[r].iter_mut().zip(&pivot_values) {
+                *entry -= &factor * pivot_entry;
             }
-            let subtract = &factor * &b[pivot_row];
-            b[r] -= subtract;
+            b[r] -= &factor * &pivot_constant;
         }
 
         pivot_col_of_row.push(col);
