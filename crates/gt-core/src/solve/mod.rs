@@ -4,6 +4,7 @@
 pub mod dominance;
 pub mod mixed_nash;
 pub mod pure_nash;
+pub mod verify;
 
 pub use dominance::{solve_dominance, DominanceMode, DominanceResult, EliminationStep};
 pub use mixed_nash::{
@@ -11,3 +12,4 @@ pub use mixed_nash::{
     MixedStrategy,
 };
 pub use pure_nash::{profitable_deviation, solve_pure_nash, Deviation, ProfileCheck, PureNashResult};
+pub use verify::{verify_equilibrium, Concept, VerifyResult};
