@@ -4,6 +4,11 @@
 //! finds every equilibrium of a non-degenerate game. Degenerate games can also
 //! have equilibria on unequal-size supports; those need a full LP, so
 //! degeneracy is detected and reported instead of being silently incomplete.
+//! Degeneracy is flagged by two independent signals, combined with OR: a
+//! structural heuristic (`is_degenerate`) that looks for a wholly-duplicated
+//! row or column, and an algebraic one that fires whenever some enumerated
+//! support's indifference system comes back consistent-but-underdetermined
+//! (`LinearSolution::Infinite`) — a degeneracy the structural check can miss.
 
 use crate::error::GtError;
 use crate::exact::{solve_linear_system, LinearSolution};
@@ -53,11 +58,14 @@ pub fn solve_mixed_nash(game: &ValidStrategicGame) -> Result<MixedNashResult, Gt
     let m = game.n_strategies(0);
     let n = game.n_strategies(1);
     let mut equilibria: Vec<MixedEquilibrium> = Vec::new();
+    let mut saw_underdetermined = false;
 
     for size in 1..=m.min(n) {
         for s0 in subsets_of_size(m, size) {
             for s1 in subsets_of_size(n, size) {
-                if let Some(eq) = try_support_pair(game, &s0, &s1) {
+                let (eq, underdetermined) = try_support_pair(game, &s0, &s1);
+                saw_underdetermined |= underdetermined;
+                if let Some(eq) = eq {
                     if !equilibria.contains(&eq) {
                         equilibria.push(eq);
                     }
@@ -66,7 +74,7 @@ pub fn solve_mixed_nash(game: &ValidStrategicGame) -> Result<MixedNashResult, Gt
         }
     }
 
-    let degenerate = is_degenerate(game);
+    let degenerate = is_degenerate(game) || saw_underdetermined;
     let warning = degenerate.then(|| {
         "this game is degenerate: some payoffs tie, so equilibria may exist on \
          unequal-size supports that this enumeration does not cover"
@@ -76,15 +84,43 @@ pub fn solve_mixed_nash(game: &ValidStrategicGame) -> Result<MixedNashResult, Gt
     Ok(MixedNashResult { equilibria, degenerate, warning })
 }
 
+/// Outcome of solving one player's indifference system for a candidate
+/// support pair.
+enum MixOutcome {
+    /// A unique, non-negative probability mixture.
+    Mix(Vec<Rational>),
+    /// The system was consistent but underdetermined (infinitely many
+    /// solutions) — a degeneracy signal, not just "no equilibrium here".
+    Underdetermined,
+    /// The system was inconsistent, or the unique solution had a negative
+    /// probability: no equilibrium on this support.
+    NoSolution,
+}
+
 /// Solve the indifference conditions for one support pair, then check the
-/// result really is an equilibrium.
+/// result really is an equilibrium. Returns the equilibrium (if any) and
+/// whether an underdetermined (degenerate) indifference system was
+/// encountered along the way.
 fn try_support_pair(
     game: &ValidStrategicGame,
     s0: &[StrategyId],
     s1: &[StrategyId],
-) -> Option<MixedEquilibrium> {
-    let y = solve_opponent_mix(game, 0, s0, s1, game.n_strategies(1))?;
-    let x = solve_opponent_mix(game, 1, s1, s0, game.n_strategies(0))?;
+) -> (Option<MixedEquilibrium>, bool) {
+    let mut saw_underdetermined = false;
+
+    let y = match solve_opponent_mix(game, 0, s0, s1, game.n_strategies(1)) {
+        MixOutcome::Mix(v) => v,
+        MixOutcome::Underdetermined => return (None, true),
+        MixOutcome::NoSolution => return (None, saw_underdetermined),
+    };
+    let x = match solve_opponent_mix(game, 1, s1, s0, game.n_strategies(0)) {
+        MixOutcome::Mix(v) => v,
+        MixOutcome::Underdetermined => {
+            saw_underdetermined = true;
+            return (None, saw_underdetermined);
+        }
+        MixOutcome::NoSolution => return (None, saw_underdetermined),
+    };
 
     let eq = MixedEquilibrium {
         strategies: vec![MixedStrategy { probs: x }, MixedStrategy { probs: y }],
@@ -98,10 +134,10 @@ fn try_support_pair(
         let support = &eq.supports[player];
         let target = per_strategy[support[0]].clone();
         if support.iter().any(|&s| per_strategy[s] != target) {
-            return None;
+            return (None, saw_underdetermined);
         }
         if (0..per_strategy.len()).any(|s| !support.contains(&s) && per_strategy[s] > target) {
-            return None;
+            return (None, saw_underdetermined);
         }
     }
 
@@ -112,19 +148,19 @@ fn try_support_pair(
         })
         .collect();
 
-    Some(MixedEquilibrium { expected_payoffs, ..eq })
+    (Some(MixedEquilibrium { expected_payoffs, ..eq }), saw_underdetermined)
 }
 
 /// Find the mixture the *opponent* must play to leave `player` indifferent
 /// across `player_support`. Returns a full-length probability vector, or
-/// `None` if the system has no valid solution.
+/// an outcome flagging why no such mixture was found.
 fn solve_opponent_mix(
     game: &ValidStrategicGame,
     player: usize,
     player_support: &[StrategyId],
     opponent_support: &[StrategyId],
     opponent_strategies: usize,
-) -> Option<Vec<Rational>> {
+) -> MixOutcome {
     let k = opponent_support.len();
     // Unknowns: one probability per opponent-support strategy, plus the
     // equilibrium payoff u. Equations: indifference across the player's
@@ -151,18 +187,20 @@ fn solve_opponent_mix(
 
     // The system is square only when the supports are equal-sized, which the
     // caller guarantees.
-    let LinearSolution::Unique(solution) = solve_linear_system(a, b) else {
-        return None;
+    let solution = match solve_linear_system(a, b) {
+        LinearSolution::Unique(solution) => solution,
+        LinearSolution::Infinite => return MixOutcome::Underdetermined,
+        LinearSolution::None => return MixOutcome::NoSolution,
     };
 
     let mut probs = vec![Rational::zero(); opponent_strategies];
     for (i, &opp) in opponent_support.iter().enumerate() {
         if solution[i] < Rational::zero() {
-            return None; // not a probability distribution
+            return MixOutcome::NoSolution; // not a probability distribution
         }
         probs[opp] = solution[i].clone();
     }
-    Some(probs)
+    MixOutcome::Mix(probs)
 }
 
 /// Expected payoff to `player` from each of their own pure strategies, given
@@ -415,5 +453,33 @@ mod tests {
         let result = solve_mixed_nash(&flat).expect("2-player cardinal");
         assert!(result.degenerate);
         assert!(result.warning.is_some());
+    }
+
+    #[test]
+    fn an_underdetermined_support_is_flagged_even_without_a_duplicated_row_or_column() {
+        // Row has 3 strategies, Col has 2. Row's own payoffs are all distinct
+        // pairs, so `is_degenerate` never fires for player 0. Col's two full
+        // columns, read down all three rows, are (5,3,1) vs (5,3,9) — also
+        // distinct, so `is_degenerate` never fires for player 1 either.
+        //
+        // But restricted to the support pair (rows {0,1}, cols {0,1}) — the
+        // only size-2 support Col has — Col's indifference system between
+        // col0 and col1 sees identical payoffs at both rows in that support
+        // (row0: 5 vs 5, row1: 3 vs 3), so the two indifference equations
+        // collapse into one: a consistent but underdetermined
+        // (`LinearSolution::Infinite`) system that the structural heuristic,
+        // which only ever looks at *whole* rows/columns, cannot see (row2's
+        // 1 vs 9 breaks the whole-column comparison).
+        let g = game(
+            vec![
+                vec![[2.0, 5.0], [0.0, 5.0]],
+                vec![[0.0, 3.0], [1.0, 3.0]],
+                vec![[1.0, 1.0], [1.0, 9.0]],
+            ],
+            PayoffKind::Cardinal,
+        );
+        let result = solve_mixed_nash(&g).expect("2-player cardinal");
+        assert!(result.degenerate, "underdetermined support must set degenerate = true");
+        assert!(result.warning.is_some(), "degenerate result must carry a warning");
     }
 }
