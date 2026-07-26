@@ -12,7 +12,8 @@ pub mod limits;
 pub mod solve;
 
 pub use analyze::{
-    analyze_structure, pareto_dominates, DominatedEquilibrium, SecurityLevel, StructureReport,
+    analyze_structure, classify, pareto_dominates, Archetype, ArchetypeReport,
+    DominatedEquilibrium, SecurityLevel, StructureReport,
 };
 pub use error::{Diagnostic, DiagnosticCode, GtError};
 pub use exact::{solve_linear_system, LinearSolution};
