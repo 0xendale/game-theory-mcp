@@ -5,11 +5,13 @@
 //! so an unchecked game cannot reach a solver.
 
 pub mod error;
+pub mod exact;
 pub mod game;
 pub mod limits;
 pub mod solve;
 
 pub use error::{Diagnostic, DiagnosticCode, GtError};
+pub use exact::{solve_linear_system, LinearSolution};
 pub use game::{
     MatrixForm, PayoffKind, Player, PlayerId, Outcome, Profile, Rational, StrategicGame,
     StrategyId, ValidStrategicGame,
