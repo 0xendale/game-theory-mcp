@@ -28,7 +28,7 @@ jobs:
         with:
           components: clippy
       - uses: Swatinem/rust-cache@v2
-      - run: cargo clippy --all-targets --all-features -- -D warnings
+      - run: cargo clippy --all-targets --all-features --locked -- -D warnings
 
   test:
     name: test
@@ -37,8 +37,17 @@ jobs:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
-      - run: cargo test --workspace
+      - run: cargo test --workspace --locked
 
-# MSRV note: workspace Cargo.toml declares rust-version = "1.75", but this is
-# not gated in CI yet — only stable has been verified locally. A follow-up
-# MSRV job could pin toolchain: "1.75" once verified green.
+  # Enforces the rust-version declared in the workspace Cargo.toml. Keep the
+  # toolchain below in step with it — an unenforced MSRV is just a claim.
+  # --locked matters here: the floor depends on the resolved dependency graph,
+  # so a fresh resolve could raise it without anyone noticing.
+  msrv:
+    name: msrv 1.85
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@1.85
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo check --workspace --all-targets --locked

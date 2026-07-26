@@ -17,19 +17,26 @@ pub enum LinearSolution {
 
 /// Solve `a x = b`. `a` is row-major.
 ///
-/// Precondition (caller must uphold): `a` is rectangular and `a.len() == b.len()`.
-/// This is checked with `debug_assert!` in debug builds only; release builds do
-/// not validate shape and will misbehave if the caller violates it.
+/// # Panics
+///
+/// Panics if `a` is not rectangular or `a.len() != b.len()`. The check runs in
+/// release builds too: a mis-shaped system has no meaningful solution, and this
+/// crate reports what went wrong rather than returning a plausible wrong answer.
 pub fn solve_linear_system(mut a: Vec<Vec<Rational>>, mut b: Vec<Rational>) -> LinearSolution {
     let rows = a.len();
-    debug_assert_eq!(rows, b.len(), "coefficient rows and constants must match");
+    assert_eq!(
+        rows,
+        b.len(),
+        "coefficient rows and constants must match: {rows} rows, {} constants",
+        b.len()
+    );
     if rows == 0 {
         return LinearSolution::Infinite;
     }
     let cols = a[0].len();
-    debug_assert!(
+    assert!(
         a.iter().all(|row| row.len() == cols),
-        "coefficient matrix must be rectangular"
+        "coefficient matrix must be rectangular: expected {cols} columns in every row"
     );
 
     let mut pivot_row = 0usize;
@@ -164,5 +171,24 @@ mod tests {
             solve_linear_system(a, b),
             LinearSolution::Infinite
         ));
+    }
+
+    // The two shape preconditions are enforced in release builds as well as
+    // debug, so they are tested rather than left to `debug_assert!`.
+
+    #[test]
+    #[should_panic(expected = "coefficient rows and constants must match")]
+    fn more_rows_than_constants_panics_naming_the_mismatch() {
+        let a = vec![vec![int(1)], vec![int(1)]];
+        let b = vec![int(1)];
+        let _ = solve_linear_system(a, b);
+    }
+
+    #[test]
+    #[should_panic(expected = "coefficient matrix must be rectangular")]
+    fn a_ragged_coefficient_matrix_panics() {
+        let a = vec![vec![int(1), int(1)], vec![int(1)]];
+        let b = vec![int(1), int(1)];
+        let _ = solve_linear_system(a, b);
     }
 }
