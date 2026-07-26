@@ -17,6 +17,7 @@ pub use game::{
     StrategyId, ValidStrategicGame,
 };
 pub use solve::{
-    profitable_deviation, solve_dominance, solve_pure_nash, Deviation, DominanceMode,
-    DominanceResult, EliminationStep, ProfileCheck, PureNashResult,
+    expected_payoff_per_strategy, profitable_deviation, solve_dominance, solve_mixed_nash,
+    solve_pure_nash, Deviation, DominanceMode, DominanceResult, EliminationStep,
+    MixedEquilibrium, MixedNashResult, MixedStrategy, ProfileCheck, PureNashResult,
 };
