@@ -24,6 +24,19 @@ pub enum DiagnosticCode {
     DuplicateProfile,
     MissingProfile,
     NonFinitePayoff,
+    // Extensive form.
+    EmptyTree,
+    RootOutOfRange,
+    ChildOutOfRange,
+    UnreachableNode,
+    NotATree,
+    EmptyActionSet,
+    DuplicateActionLabel,
+    TerminalPayoffArityMismatch,
+    InformationSetNotPartition,
+    InformationSetOnTerminal,
+    InformationSetMixedPlayers,
+    InformationSetActionCountMismatch,
 }
 
 #[derive(Debug, Clone, Error)]
