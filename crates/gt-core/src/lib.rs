@@ -66,6 +66,38 @@
 //! assert_eq!(result.solutions[0].path, vec![(0, 0), (1, 1)]);
 //! # Ok::<(), gt_core::GtError>(())
 //! ```
+//!
+//! Repeating a stage game changes what is sustainable. Grim trigger with Nash
+//! reversion gives the exact patience cooperation requires:
+//!
+//! ```
+//! use gt_core::{
+//!     analyze_repeated_game, MatrixForm, PayoffKind, Punishment, Rational,
+//!     StrategicGame, ValidStrategicGame,
+//! };
+//!
+//! let matrix = MatrixForm {
+//!     players: ["Row".into(), "Col".into()],
+//!     row_strategies: vec!["Cooperate".into(), "Defect".into()],
+//!     col_strategies: vec!["Cooperate".into(), "Defect".into()],
+//!     payoff_matrix: vec![
+//!         vec![[3.0, 3.0], [0.0, 4.0]],
+//!         vec![[4.0, 0.0], [1.0, 1.0]],
+//!     ],
+//!     payoff_kind: PayoffKind::Cardinal,
+//! };
+//! let game = ValidStrategicGame::validate(StrategicGame::try_from(matrix)?)?;
+//!
+//! let report = analyze_repeated_game(&game, &[0, 0], Punishment::GrimTrigger, None)?;
+//!
+//! // Mutual cooperation is sustainable exactly when the discount factor
+//! // reaches 1/3 — an exact fraction, not a rounded decimal.
+//! assert_eq!(
+//!     report.critical_discount_factor,
+//!     Some(Rational::new(1.into(), 3.into()))
+//! );
+//! # Ok::<(), gt_core::GtError>(())
+//! ```
 
 pub mod analyze;
 pub mod error;

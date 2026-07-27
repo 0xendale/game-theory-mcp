@@ -137,7 +137,7 @@ All of Part III–V is **out of v1.0 and v1.1**. Recorded here so the phase-2 sp
 Consequences, all of which must be honored:
 
 1. Do **not** cite Bonanno chapters in `analyze_repeated_game` output or in its MCP resource text.
-2. Source the definitions and test cases elsewhere — Osborne & Rubinstein, *A Course in Game Theory* ch. 8, or Mailath & Samuelson, *Repeated Games and Reputations*. Record whichever is used in the implementation plan.
+2. Source the definitions and test cases elsewhere. **Decided 2026-07-27:** the source of record is Martin J. Osborne and Ariel Rubinstein, *A Course in Game Theory*, MIT Press, 1994, ch. 8. Payoff convention is the **discounted sum** with δ ∈ [0, 1), and the punishment is grim trigger with reversion to a pure-strategy stage Nash equilibrium. Mailath & Samuelson was the alternative; it goes further into imperfect monitoring than v1.0 needs.
 3. Where the product copy says "anchored in Bonanno's textbook", the repeated-games tool is an explicit exception and should say so in its own description.
 
 ---
