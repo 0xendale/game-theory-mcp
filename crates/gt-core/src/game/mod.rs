@@ -2,10 +2,16 @@
 
 use serde::{Deserialize, Serialize};
 
+pub mod convert;
+pub mod extensive;
 pub mod matrix_form;
 pub mod validate;
+pub mod validate_extensive;
+pub use convert::{plan_to_strategy_index, to_strategic};
+pub use extensive::{ExtensiveGame, Node, NodeId};
 pub use matrix_form::MatrixForm;
 pub use validate::ValidStrategicGame;
+pub use validate_extensive::ValidExtensiveGame;
 
 /// Index into `StrategicGame::players`.
 pub type PlayerId = usize;

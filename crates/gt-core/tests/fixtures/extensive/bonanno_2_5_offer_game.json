@@ -1,0 +1,26 @@
+{
+  "name": "bonanno_2_5_offer_game",
+  "citation": "Bonanno (2015), Game Theory, Exercise 2.5 (the game of Figure 2.2), solution p. 96. Published result: the unique backward-induction solution is (Offer 50-50, (Accept, Reject)).",
+  "game": {
+    "players": [
+      { "id": 0, "name": "Player 1" },
+      { "id": 1, "name": "Player 2" }
+    ],
+    "root": 0,
+    "nodes": [
+      { "kind": "decision", "player": 0, "actions": [["Offer 50-50", 1], ["Offer 70-30", 2]] },
+      { "kind": "decision", "player": 1, "actions": [["Accept", 3], ["Reject", 4]] },
+      { "kind": "decision", "player": 1, "actions": [["Accept", 5], ["Reject", 6]] },
+      { "kind": "terminal", "payoffs": [2, 3] },
+      { "kind": "terminal", "payoffs": [1, 2] },
+      { "kind": "terminal", "payoffs": [3, 1] },
+      { "kind": "terminal", "payoffs": [1, 2] }
+    ],
+    "information_sets": [[0], [1], [2]],
+    "payoff_kind": "cardinal"
+  },
+  "expected_spe": {
+    "paths": [[[0, 0], [1, 0]]],
+    "payoffs": [[2, 3]]
+  }
+}

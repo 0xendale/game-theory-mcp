@@ -1,0 +1,26 @@
+{
+  "name": "bonanno_2_3_one_timer",
+  "citation": "Bonanno (2015), Game Theory, Exercise 2.3 (second game, the one-timer), solution p. 94. Published result: against a one-timer you do not pay and the hostage is killed.",
+  "game": {
+    "players": [
+      { "id": 0, "name": "You" },
+      { "id": 1, "name": "Mr T" }
+    ],
+    "root": 0,
+    "nodes": [
+      { "kind": "decision", "player": 0, "actions": [["not pay", 1], ["pay", 2]] },
+      { "kind": "decision", "player": 1, "actions": [["release", 3], ["kill", 4]] },
+      { "kind": "decision", "player": 1, "actions": [["release", 5], ["kill", 6]] },
+      { "kind": "terminal", "payoffs": [4, 1] },
+      { "kind": "terminal", "payoffs": [2, 2] },
+      { "kind": "terminal", "payoffs": [3, 3] },
+      { "kind": "terminal", "payoffs": [1, 4] }
+    ],
+    "information_sets": [[0], [1], [2]],
+    "payoff_kind": "cardinal"
+  },
+  "expected_spe": {
+    "paths": [[[0, 0], [1, 1]]],
+    "payoffs": [[2, 2]]
+  }
+}

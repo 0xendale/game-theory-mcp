@@ -136,6 +136,17 @@ The blueprint returns a hardcoded string. As written the tool would be the singl
 
 **Resolution:** deferred to phase 2 and **removed from v1 marketing copy**. The v1 schema reserves the shape for information sets so the representation does not break when it lands, but v1 solvers reject non-singleton information sets with a typed error.
 
+### 7.5a Form conversion is one-directional, and tree solving is perfect-information only
+
+The design describes `convert_form` as "extensive ↔ strategic". As implemented it converts **extensive → strategic only**, and every tree solver (`to_strategic`, `solve_backward_induction`, `verify_spe`) requires perfect information, returning `ImperfectInformationUnsupported` and naming the offending information set otherwise.
+
+**Reason, two parts:**
+
+1. *No reverse direction.* A strategic form does not determine a tree — many extensive games share one normal form, differing in who moves when and who observes what. Synthesising "a" tree would mean inventing timing the caller never specified, and any answer about a dynamic property of that invented tree would be an artefact of the invention. There is no correct output to return, so the direction is not offered.
+2. *No imperfect information.* Solving non-singleton information sets needs sequential-rationality machinery with beliefs (Bonanno ch. 10–12), which is phase 2 by §7.5 above. Converting under information sets is well-defined but would produce a strategic form no v1.0 tree solver could then reason about, so it lands with the solvers rather than before them.
+
+The `information_sets` field is populated and validated in v1.0 — it must partition the decision nodes, each set confined to one player with equal action counts — so the schema and its checks do not change when solving arrives.
+
 ### 7.6 Additions not present in the source spec
 
 Agreed during design, in phase order.

@@ -1,0 +1,27 @@
+{
+  "name": "stackelberg_discrete",
+  "origin": "original",
+  "citation": "Constructed for gt-core; discrete Stackelberg leader-follower structure. After Leader Low the Follower prefers High (5 > 2); after Leader High the Follower prefers Low (4 > 3); the Leader therefore plays High for 6 rather than Low for 4.",
+  "game": {
+    "players": [
+      { "id": 0, "name": "Leader" },
+      { "id": 1, "name": "Follower" }
+    ],
+    "root": 0,
+    "nodes": [
+      { "kind": "decision", "player": 0, "actions": [["Low", 1], ["High", 2]] },
+      { "kind": "decision", "player": 1, "actions": [["Low", 3], ["High", 4]] },
+      { "kind": "decision", "player": 1, "actions": [["Low", 5], ["High", 6]] },
+      { "kind": "terminal", "payoffs": [3, 2] },
+      { "kind": "terminal", "payoffs": [4, 5] },
+      { "kind": "terminal", "payoffs": [6, 4] },
+      { "kind": "terminal", "payoffs": [5, 3] }
+    ],
+    "information_sets": [[0], [1], [2]],
+    "payoff_kind": "cardinal"
+  },
+  "expected_spe": {
+    "paths": [[[0, 1], [2, 0]]],
+    "payoffs": [[6, 4]]
+  }
+}
