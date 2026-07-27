@@ -1,0 +1,35 @@
+{
+  "name": "bonanno_2_6_three_player",
+  "citation": "Bonanno (2015), Game Theory, Exercise 2.6 (the game of Figure 2.3), solution p. 96. Published result: two backward-induction solutions, (a,(c,f),g) and (b,(c,e),h). Player 3 is indifferent at its node, which is what produces the second solution.",
+  "game": {
+    "players": [
+      { "id": 0, "name": "Player 1" },
+      { "id": 1, "name": "Player 2" },
+      { "id": 2, "name": "Player 3" }
+    ],
+    "root": 0,
+    "nodes": [
+      { "kind": "decision", "player": 0, "actions": [["a", 1], ["b", 2]] },
+      { "kind": "decision", "player": 1, "actions": [["c", 3], ["d", 4]] },
+      { "kind": "decision", "player": 1, "actions": [["e", 5], ["f", 6]] },
+      { "kind": "terminal", "payoffs": [2, 1, 0] },
+      { "kind": "terminal", "payoffs": [0, 0, 2] },
+      { "kind": "terminal", "payoffs": [3, 1, 0] },
+      { "kind": "decision", "player": 2, "actions": [["g", 7], ["h", 8]] },
+      { "kind": "terminal", "payoffs": [1, 2, 1] },
+      { "kind": "terminal", "payoffs": [0, 0, 1] }
+    ],
+    "information_sets": [[0], [1], [2], [6]],
+    "payoff_kind": "cardinal"
+  },
+  "expected_spe": {
+    "paths": [
+      [[0, 0], [1, 0]],
+      [[0, 1], [2, 0]]
+    ],
+    "payoffs": [
+      [2, 1, 0],
+      [3, 1, 0]
+    ]
+  }
+}

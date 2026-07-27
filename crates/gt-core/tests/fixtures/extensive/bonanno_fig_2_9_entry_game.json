@@ -1,0 +1,24 @@
+{
+  "name": "bonanno_fig_2_9_entry_game",
+  "citation": "Bonanno (2015), Game Theory, Figure 2.9, p. 77. Published backward-induction solution: (in, accommodate).",
+  "game": {
+    "players": [
+      { "id": 0, "name": "Potential entrant" },
+      { "id": 1, "name": "Incumbent" }
+    ],
+    "root": 0,
+    "nodes": [
+      { "kind": "decision", "player": 0, "actions": [["in", 1], ["out", 2]] },
+      { "kind": "decision", "player": 1, "actions": [["fight", 3], ["accommodate", 4]] },
+      { "kind": "terminal", "payoffs": [1, 5] },
+      { "kind": "terminal", "payoffs": [0, 0] },
+      { "kind": "terminal", "payoffs": [2, 2] }
+    ],
+    "information_sets": [[0], [1]],
+    "payoff_kind": "cardinal"
+  },
+  "expected_spe": {
+    "paths": [[[0, 0], [1, 1]]],
+    "payoffs": [[2, 2]]
+  }
+}
