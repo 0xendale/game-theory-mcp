@@ -46,8 +46,9 @@ pub use analyze::{
 pub use error::{Diagnostic, DiagnosticCode, GtError};
 pub use exact::{solve_linear_system, LinearSolution};
 pub use game::{
-    ExtensiveGame, MatrixForm, Node, NodeId, Outcome, PayoffKind, Player, PlayerId, Profile,
-    Rational, StrategicGame, StrategyId, ValidExtensiveGame, ValidStrategicGame,
+    plan_to_strategy_index, to_strategic, ExtensiveGame, MatrixForm, Node, NodeId, Outcome,
+    PayoffKind, Player, PlayerId, Profile, Rational, StrategicGame, StrategyId, ValidExtensiveGame,
+    ValidStrategicGame,
 };
 pub use solve::{
     expected_payoff_per_strategy, profitable_deviation, solve_dominance, solve_mixed_nash,

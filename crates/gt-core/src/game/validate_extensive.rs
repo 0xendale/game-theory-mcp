@@ -369,10 +369,10 @@ mod tests {
                     actions: vec![("Fight".into(), 3), ("Accommodate".into(), 4)],
                 },
                 Node::Terminal {
-                    payoffs: vec![2.0, 0.0],
+                    payoffs: vec![0.0, 2.0],
                 },
                 Node::Terminal {
-                    payoffs: vec![0.0, 0.0],
+                    payoffs: vec![-1.0, -1.0],
                 },
                 Node::Terminal {
                     payoffs: vec![1.0, 1.0],
