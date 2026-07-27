@@ -3,12 +3,14 @@
 //! Each test states a fact that follows from the definition of a solution
 //! concept, independently of how this crate computes it.
 
+use gt_core::analyze::repeated::{analyze_repeated_game, Punishment};
 use gt_core::analyze::structure::analyze_structure;
 use gt_core::game::{Outcome, PayoffKind, Player, Rational, StrategicGame, ValidStrategicGame};
-use gt_core::solve::dominance::{solve_dominance, DominanceMode};
+use gt_core::solve::dominance::{solve_dominance, strictly_dominated_by_mixture, DominanceMode};
 use gt_core::solve::mixed_nash::{expected_payoff_per_strategy, solve_mixed_nash};
 use gt_core::solve::pure_nash::solve_pure_nash;
 use gt_core::solve::verify::{verify_equilibrium, Concept};
+use gt_core::solve::verify_mixed::verify_mixed_nash;
 use proptest::prelude::*;
 
 /// Small integer payoffs keep the games interesting without making the
@@ -305,6 +307,173 @@ mod extensive {
                     prop_assert_eq!(planned, owned);
                 }
             }
+        }
+    }
+}
+
+/// Pure strict dominance, re-derived here so the property test does not lean
+/// on the module it is testing.
+fn strictly_dominates_pure(
+    game: &ValidStrategicGame,
+    surviving: &[Vec<usize>],
+    player: usize,
+    better: usize,
+    worse: usize,
+) -> bool {
+    all_profiles(surviving, player).into_iter().all(|others| {
+        let mut with_better = others.clone();
+        let mut with_worse = others;
+        with_better[player] = better;
+        with_worse[player] = worse;
+        game.payoff(&with_better, player) > game.payoff(&with_worse, player)
+    })
+}
+
+/// Every joint profile of the players other than `player`; `player`'s own slot
+/// is a placeholder for the caller to overwrite.
+fn all_profiles(surviving: &[Vec<usize>], player: usize) -> Vec<Vec<usize>> {
+    let n = surviving.len();
+    let mut out = vec![vec![0usize; n]];
+    for p in 0..n {
+        if p == player {
+            continue;
+        }
+        let mut next = Vec::with_capacity(out.len() * surviving[p].len());
+        for base in &out {
+            for &s in &surviving[p] {
+                let mut extended = base.clone();
+                extended[p] = s;
+                next.push(extended);
+            }
+        }
+        out = next;
+    }
+    out
+}
+
+/// The full strategy set of every player — the starting point of iterated
+/// deletion, and the setting in which "dominated" is asked below.
+fn full_survival(game: &ValidStrategicGame) -> Vec<Vec<usize>> {
+    (0..game.n_players())
+        .map(|p| (0..game.n_strategies(p)).collect())
+        .collect()
+}
+
+proptest! {
+    /// A strategy strictly dominated by a *pure* strategy is also dominated by
+    /// a mixture — the degenerate mixture putting weight 1 on the dominator.
+    /// The LP must never miss what the cheap check finds.
+    #[test]
+    fn mixed_dominance_finds_everything_pure_dominance_finds(game in arb_game(4)) {
+        let surviving = full_survival(&game);
+
+        for player in 0..game.n_players() {
+            for candidate in 0..game.n_strategies(player) {
+                let pure_dominated = (0..game.n_strategies(player)).any(|other| {
+                    other != candidate
+                        && strictly_dominates_pure(&game, &surviving, player, other, candidate)
+                });
+                if pure_dominated {
+                    prop_assert!(
+                        strictly_dominated_by_mixture(&game, &surviving, player, candidate)
+                            .is_some(),
+                        "pure dominance implies mixed dominance"
+                    );
+                }
+            }
+        }
+    }
+
+    /// Whatever mixture the LP returns really does dominate: re-checked against
+    /// every opponent profile, independently of the solver.
+    #[test]
+    fn a_reported_dominating_mixture_really_dominates(game in arb_game(4)) {
+        let surviving = full_survival(&game);
+        let zero = Rational::from_integer(0.into());
+        let one = Rational::from_integer(1.into());
+
+        for player in 0..game.n_players() {
+            for candidate in 0..game.n_strategies(player) {
+                let Some(mix) =
+                    strictly_dominated_by_mixture(&game, &surviving, player, candidate)
+                else {
+                    continue;
+                };
+
+                let total: Rational = mix.iter().sum();
+                prop_assert_eq!(total, one.clone());
+                prop_assert!(mix.iter().all(|p| *p >= zero));
+
+                for others in all_profiles(&surviving, player) {
+                    let mut own_profile = others.clone();
+                    own_profile[player] = candidate;
+                    let baseline = game.payoff(&own_profile, player).clone();
+
+                    let mut mixed = zero.clone();
+                    for (s, weight) in mix.iter().enumerate() {
+                        let mut profile = others.clone();
+                        profile[player] = s;
+                        mixed += weight * game.payoff(&profile, player);
+                    }
+                    prop_assert!(mixed > baseline, "mixture must beat the candidate everywhere");
+                }
+            }
+        }
+    }
+
+    /// Every equilibrium `solve_mixed_nash` reports must verify against the
+    /// independent definition-checker.
+    #[test]
+    fn solved_mixed_equilibria_verify(game in arb_game(3)) {
+        let solved = solve_mixed_nash(&game).expect("2-player cardinal game");
+        for eq in &solved.equilibria {
+            let result = verify_mixed_nash(&game, &eq.strategies)
+                .expect("a solver-produced equilibrium is well formed");
+            prop_assert!(
+                result.holds,
+                "solver produced a profile the verifier rejects: {:?}",
+                result
+            );
+        }
+    }
+
+    /// The critical discount factor is a genuine threshold: at it, the target
+    /// is sustainable; at half of it, it is not.
+    #[test]
+    fn the_critical_discount_factor_is_a_threshold(
+        game in arb_game(3),
+        row in 0usize..3,
+        col in 0usize..3,
+    ) {
+        let target = [row % game.n_strategies(0), col % game.n_strategies(1)];
+        let report =
+            match analyze_repeated_game(&game, &target, Punishment::GrimTrigger, None) {
+                Ok(report) => report,
+                // Stage games with no pure Nash equilibrium have no grim
+                // trigger to analyse; that case is covered by unit tests.
+                Err(_) => return Ok(()),
+            };
+        let Some(threshold) = report.critical_discount_factor.clone() else {
+            return Ok(());
+        };
+
+        let at = analyze_repeated_game(
+            &game,
+            &target,
+            Punishment::GrimTrigger,
+            Some(threshold.clone()),
+        )
+        .expect("the threshold is itself a valid discount factor")
+        .sustainable_at;
+        prop_assert_eq!(at, Some(true));
+
+        if threshold > Rational::from_integer(0.into()) {
+            let below = &threshold / Rational::from_integer(2.into());
+            let result =
+                analyze_repeated_game(&game, &target, Punishment::GrimTrigger, Some(below))
+                    .expect("half of the threshold is a valid discount factor")
+                    .sustainable_at;
+            prop_assert_eq!(result, Some(false));
         }
     }
 }

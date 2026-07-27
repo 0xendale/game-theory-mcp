@@ -129,10 +129,16 @@ pub fn analyze_repeated_game(
             }
         }
 
-        // (1 - δ) d + δ p <= c, solved for δ.
+        // (1 - δ) d + δ p <= c, solved for δ: δ* = (d - c) / (d - p).
+        //
+        // That quotient only lands below 1 when the punishment is strictly
+        // worse than the target. If `p >= c`, being punished is no worse than
+        // cooperating, so patience cannot enforce anything and δ* would come
+        // out at 1 or above — reported as `None`, never as a threshold a
+        // caller could compare a legal δ against.
         let critical_discount_factor = if deviation_payoff <= target_payoff {
             Some(Rational::zero())
-        } else if deviation_payoff > punishment_payoff {
+        } else if punishment_payoff < target_payoff {
             Some((&deviation_payoff - &target_payoff) / (&deviation_payoff - &punishment_payoff))
         } else {
             None
@@ -170,8 +176,9 @@ pub fn analyze_repeated_game(
     let note = match &critical_discount_factor {
         Some(_) => None,
         None => Some(
-            "no discount factor below 1 sustains this profile: some player's best \
-             one-shot deviation pays at least as much as the punishment does"
+            "no discount factor below 1 sustains this profile: for some player the \
+             punishment pays at least as much as the target does, so the threat of \
+             reverting to it cannot deter a profitable deviation"
                 .to_string(),
         ),
     };
@@ -330,6 +337,36 @@ mod tests {
         let err = analyze_repeated_game(&pd(), &[9, 0], Punishment::GrimTrigger, None)
             .expect_err("out of range");
         assert!(matches!(err, GtError::UnknownProfile { .. }));
+    }
+
+    /// A punishment paying exactly what the target pays gives δ* = 1, which is
+    /// not a legal discount factor. Reporting it as a threshold would let a
+    /// caller "sustain" the profile at a δ no legal call can supply, so it is
+    /// reported as unsustainable instead.
+    #[test]
+    fn a_punishment_no_worse_than_the_target_sustains_nothing() {
+        // (B, R) is the only pure Nash equilibrium and pays Row 1 — exactly
+        // what the target (A, L) pays. Row's deviation to B against L pays 2.
+        let form = MatrixForm {
+            players: ["Row".into(), "Col".into()],
+            row_strategies: vec!["A".into(), "B".into()],
+            col_strategies: vec!["L".into(), "R".into()],
+            payoff_matrix: vec![vec![[1.0, 0.0], [0.0, 0.0]], vec![[2.0, 1.0], [1.0, 2.0]]],
+            payoff_kind: PayoffKind::Cardinal,
+        };
+        let g = ValidStrategicGame::validate(StrategicGame::try_from(form).unwrap()).unwrap();
+        let report =
+            analyze_repeated_game(&g, &[0, 0], Punishment::GrimTrigger, None).expect("analyzed");
+
+        let row = &report.per_player[0];
+        assert_eq!(row.target_payoff, int(1));
+        assert_eq!(row.deviation_payoff, int(2));
+        assert_eq!(row.punishment_payoff, int(1), "punishment ties the target");
+        assert_eq!(
+            row.critical_discount_factor, None,
+            "the naive formula would give 1, which is not a legal discount factor"
+        );
+        assert_eq!(report.critical_discount_factor, None);
     }
 
     #[test]
