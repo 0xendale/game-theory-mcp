@@ -180,3 +180,131 @@ proptest! {
         }
     }
 }
+
+/// Cross-checks tying the extensive form to the strategic form.
+///
+/// These catch what the fixtures cannot: a `to_strategic` that enumerates only
+/// on-path actions passes every hand-written example whose tree happens to be
+/// fully reached, and fails here.
+mod extensive {
+    use gt_core::game::{ExtensiveGame, Node, PayoffKind, Player, ValidExtensiveGame};
+    use gt_core::solve::pure_nash::solve_pure_nash;
+    use gt_core::{plan_to_strategy_index, solve_backward_induction, to_strategic, verify_spe};
+    use proptest::prelude::*;
+
+    /// Depth of node `i` in a full binary tree with the root at index 0 and the
+    /// children of `i` at `2i+1`, `2i+2`.
+    fn depth_of(i: usize) -> u32 {
+        (usize::BITS - (i + 1).leading_zeros()) - 1
+    }
+
+    /// A full binary tree of the given depth. The player acting at depth `d` is
+    /// `d % n_players`, which keeps any one player's strategy count — the
+    /// product of their nodes' action counts — inside the strategic-form limit.
+    fn build_full_binary_tree(depth: u32, n_players: usize, leaves: &[Vec<i64>]) -> ExtensiveGame {
+        let n_internal = (1usize << depth) - 1;
+        let mut nodes = Vec::with_capacity(n_internal + leaves.len());
+        let mut information_sets = Vec::with_capacity(n_internal);
+        for i in 0..n_internal {
+            nodes.push(Node::Decision {
+                player: (depth_of(i) as usize) % n_players,
+                actions: vec![("0".into(), 2 * i + 1), ("1".into(), 2 * i + 2)],
+            });
+            information_sets.push(vec![i]);
+        }
+        for payoffs in leaves {
+            nodes.push(Node::Terminal {
+                payoffs: payoffs.iter().map(|&u| u as f64).collect(),
+            });
+        }
+        ExtensiveGame {
+            players: (0..n_players)
+                .map(|id| Player {
+                    id,
+                    name: format!("P{id}"),
+                })
+                .collect(),
+            root: 0,
+            nodes,
+            information_sets,
+            payoff_kind: PayoffKind::Cardinal,
+        }
+    }
+
+    fn arb_tree(depth: u32, n_players: usize) -> impl Strategy<Value = ExtensiveGame> {
+        let n_leaves = 1usize << depth;
+        prop::collection::vec(prop::collection::vec(-3i64..=3, n_players), n_leaves)
+            .prop_map(move |leaves| build_full_binary_tree(depth, n_players, &leaves))
+    }
+
+    /// Bonanno §2.4: every backward-induction solution, read as a profile of
+    /// complete contingent plans, is a Nash equilibrium of the converted
+    /// strategic form.
+    fn assert_bi_outcome_is_nash(game: ExtensiveGame) -> Result<(), TestCaseError> {
+        let g = ValidExtensiveGame::validate(game).expect("the generator builds valid trees");
+        let bi = solve_backward_induction(&g).expect("perfect information");
+        let strategic = to_strategic(&g).expect("converts");
+        let nash = solve_pure_nash(&strategic);
+
+        for spe in &bi.solutions {
+            let profile: Vec<usize> = (0..g.n_players())
+                .map(|p| plan_to_strategy_index(&g, p, &spe.profile[p]))
+                .collect();
+            prop_assert!(
+                nash.equilibria.contains(&profile),
+                "SPE {:?} maps to strategic profile {:?}, which is not among the pure Nash \
+                 equilibria {:?}",
+                spe.profile,
+                profile,
+                nash.equilibria
+            );
+        }
+        Ok(())
+    }
+
+    proptest! {
+        #![proptest_config(ProptestConfig::with_cases(200))]
+
+        #[test]
+        fn bi_outcome_is_nash_of_converted_form_two_players(game in arb_tree(2, 2)) {
+            assert_bi_outcome_is_nash(game)?;
+        }
+
+        #[test]
+        fn bi_outcome_is_nash_of_converted_form_three_players(game in arb_tree(3, 3)) {
+            assert_bi_outcome_is_nash(game)?;
+        }
+
+        /// verify_spe accepts every solution the solver produces — the two are
+        /// written independently, so agreement is evidence about both.
+        #[test]
+        fn verify_accepts_every_bi_solution(game in arb_tree(3, 3)) {
+            let g = ValidExtensiveGame::validate(game).expect("valid");
+            let bi = solve_backward_induction(&g).expect("perfect information");
+            prop_assert!(!bi.solutions.is_empty(), "a finite tree always has an SPE");
+            for spe in &bi.solutions {
+                let checked = verify_spe(&g, &spe.profile).expect("checked");
+                prop_assert!(
+                    checked.holds,
+                    "verify_spe rejected an SPE: {:?}",
+                    checked.deviation
+                );
+            }
+        }
+
+        /// Every backward-induction solution assigns an action at every decision
+        /// node — the complete-contingent-plan requirement itself.
+        #[test]
+        fn every_solution_is_a_complete_contingent_plan(game in arb_tree(3, 3)) {
+            let g = ValidExtensiveGame::validate(game).expect("valid");
+            let bi = solve_backward_induction(&g).expect("perfect information");
+            for spe in &bi.solutions {
+                for p in 0..g.n_players() {
+                    let owned = g.decision_nodes_of(p);
+                    let planned: Vec<_> = spe.profile[p].iter().map(|(n, _)| *n).collect();
+                    prop_assert_eq!(planned, owned);
+                }
+            }
+        }
+    }
+}
