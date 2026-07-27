@@ -52,7 +52,8 @@ pub use game::{
 };
 pub use solve::{
     expected_payoff_per_strategy, profitable_deviation, solve_backward_induction, solve_dominance,
-    solve_mixed_nash, solve_pure_nash, verify_equilibrium, BackwardInductionResult, Concept,
-    Deviation, DominanceMode, DominanceResult, EliminationStep, MixedEquilibrium, MixedNashResult,
-    MixedStrategy, NodeDecision, ProfileCheck, PureNashResult, SpeSolution, VerifyResult,
+    solve_mixed_nash, solve_pure_nash, verify_equilibrium, verify_spe, BackwardInductionResult,
+    Concept, Deviation, DominanceMode, DominanceResult, EliminationStep, MixedEquilibrium,
+    MixedNashResult, MixedStrategy, NodeDecision, ProfileCheck, PureNashResult, SpeDeviation,
+    SpeSolution, SpeVerifyResult, VerifyResult,
 };

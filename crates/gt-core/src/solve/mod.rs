@@ -8,6 +8,7 @@ pub mod dominance;
 pub mod mixed_nash;
 pub mod pure_nash;
 pub mod verify;
+pub mod verify_spe;
 
 pub use backward_induction::{
     solve_backward_induction, BackwardInductionResult, NodeDecision, SpeSolution,
@@ -21,3 +22,4 @@ pub use pure_nash::{
     profitable_deviation, solve_pure_nash, Deviation, ProfileCheck, PureNashResult,
 };
 pub use verify::{verify_equilibrium, Concept, VerifyResult};
+pub use verify_spe::{verify_spe, SpeDeviation, SpeVerifyResult};
