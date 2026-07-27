@@ -226,9 +226,17 @@ pub fn expected_payoff_per_strategy(
     eq: &MixedEquilibrium,
     player: usize,
 ) -> Vec<Rational> {
-    let opponent = 1 - player;
-    let opponent_mix = &eq.strategies[opponent].probs;
+    expected_payoff_against(game, &eq.strategies[1 - player].probs, player)
+}
 
+/// Expected payoff to `player` from each of their own pure strategies, against
+/// an explicit opponent mixture. Two-player games only — the caller has
+/// already checked the player count.
+pub fn expected_payoff_against(
+    game: &ValidStrategicGame,
+    opponent_mix: &[Rational],
+    player: usize,
+) -> Vec<Rational> {
     (0..game.n_strategies(player))
         .map(|own| {
             let mut total = Rational::zero();

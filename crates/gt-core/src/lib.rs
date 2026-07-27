@@ -86,9 +86,11 @@ pub use game::{
     ValidStrategicGame,
 };
 pub use solve::{
-    expected_payoff_per_strategy, profitable_deviation, solve_backward_induction, solve_dominance,
-    solve_mixed_nash, solve_pure_nash, strictly_dominated_by_mixture, verify_equilibrium,
-    verify_spe, BackwardInductionResult, Concept, Deviation, DominanceMode, DominanceResult,
-    Dominator, EliminationStep, MixedEquilibrium, MixedNashResult, MixedStrategy, NodeDecision,
-    ProfileCheck, PureNashResult, SpeDeviation, SpeSolution, SpeVerifyResult, VerifyResult,
+    expected_payoff_against, expected_payoff_per_strategy, profitable_deviation,
+    solve_backward_induction, solve_dominance, solve_mixed_nash, solve_pure_nash,
+    strictly_dominated_by_mixture, verify_equilibrium, verify_mixed_nash, verify_spe,
+    BackwardInductionResult, Concept, Deviation, DominanceMode, DominanceResult, Dominator,
+    EliminationStep, MixedDeviation, MixedEquilibrium, MixedNashResult, MixedStrategy,
+    MixedVerifyResult, NodeDecision, ProfileCheck, PureNashResult, SpeDeviation, SpeSolution,
+    SpeVerifyResult, SupportViolation, VerifyResult,
 };

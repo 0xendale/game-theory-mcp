@@ -77,6 +77,9 @@ pub enum GtError {
 
     #[error("player {player} has no strategy at profile {profile:?}")]
     UnknownProfile { player: PlayerId, profile: Profile },
+
+    #[error("player {player}'s mixed strategy is not a probability distribution: {reason}")]
+    InvalidMixedStrategy { player: PlayerId, reason: String },
 }
 
 impl GtError {
