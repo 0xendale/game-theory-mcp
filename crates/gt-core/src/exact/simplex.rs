@@ -122,7 +122,7 @@ pub fn solve_lp(problem: LpProblem) -> LpSolution {
 
     // Phase one is never unbounded (its objective is bounded above by zero),
     // so an Unbounded verdict here would be a bug in the pivot loop.
-    match simplex(&mut tableau, &mut basis, &phase_one_cost) {
+    match simplex(&mut tableau, &mut basis, &phase_one_cost, total) {
         SimplexOutcome::Optimal => {}
         SimplexOutcome::Unbounded => unreachable!("phase one is bounded above by zero"),
     }
@@ -157,7 +157,7 @@ pub fn solve_lp(problem: LpProblem) -> LpSolution {
     let mut phase_two_cost = objective.clone();
     phase_two_cost.resize(total, Rational::zero());
 
-    match simplex(&mut tableau, &mut basis, &phase_two_cost) {
+    match simplex(&mut tableau, &mut basis, &phase_two_cost, cols) {
         SimplexOutcome::Unbounded => LpSolution::Unbounded,
         SimplexOutcome::Optimal => {
             let mut x = vec![Rational::zero(); cols];
@@ -181,17 +181,23 @@ enum SimplexOutcome {
 }
 
 /// Pivot until no reduced cost is positive. `cost` is indexed by column.
+///
+/// Only columns below `enterable` may enter the basis. Phase two passes the
+/// original column count here: letting an artificial column back into the
+/// basis would abandon the equation it was standing in for, and the reported
+/// point would not satisfy `A x = b`.
 fn simplex(
     tableau: &mut [Vec<Rational>],
     basis: &mut [usize],
     cost: &[Rational],
+    enterable: usize,
 ) -> SimplexOutcome {
     let total = cost.len();
     loop {
         // Reduced costs are recomputed from scratch each iteration. That is
         // O(rows * cols) per pivot rather than O(cols), but it keeps a single
         // source of truth for the tableau and cannot drift.
-        let entering = (0..total).find(|&c| {
+        let entering = (0..enterable).find(|&c| {
             let dual: Rational = basis
                 .iter()
                 .enumerate()
@@ -382,6 +388,36 @@ mod tests {
                 assert_eq!(value, int(1));
                 assert_eq!(x[0], int(0), "the degenerate variable stays at zero");
                 assert_eq!(x[1], int(1));
+            }
+            other => panic!("expected an optimum, got {other:?}"),
+        }
+    }
+
+    /// The shape `solve_dominance` builds: mixture weights, a margin, and one
+    /// surplus column per opponent profile. Regression guard — an earlier
+    /// version let phase two pull an artificial column back into the basis and
+    /// called this program unbounded, when its optimum is 1/2.
+    #[test]
+    fn solves_a_dominance_shaped_program() {
+        // Columns: y_A, y_B, eps, s_L, s_R.
+        let problem = LpProblem {
+            objective: vec![int(0), int(0), int(1), int(0), int(0)],
+            constraints: vec![
+                vec![int(3), int(0), int(-1), int(-1), int(0)],
+                vec![int(0), int(3), int(-1), int(0), int(-1)],
+                vec![int(1), int(1), int(0), int(0), int(0)],
+            ],
+            rhs: vec![int(1), int(1), int(1)],
+        };
+        match solve_lp(problem) {
+            LpSolution::Optimal { value, x } => {
+                assert_eq!(
+                    value,
+                    r(1, 2),
+                    "the even mixture beats the candidate by 1/2"
+                );
+                assert_eq!(x[0], r(1, 2));
+                assert_eq!(x[1], r(1, 2));
             }
             other => panic!("expected an optimum, got {other:?}"),
         }

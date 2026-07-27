@@ -13,7 +13,10 @@ pub mod verify_spe;
 pub use backward_induction::{
     solve_backward_induction, BackwardInductionResult, NodeDecision, SpeSolution,
 };
-pub use dominance::{solve_dominance, DominanceMode, DominanceResult, EliminationStep};
+pub use dominance::{
+    solve_dominance, strictly_dominated_by_mixture, DominanceMode, DominanceResult, Dominator,
+    EliminationStep,
+};
 pub use mixed_nash::{
     expected_payoff_per_strategy, solve_mixed_nash, MixedEquilibrium, MixedNashResult,
     MixedStrategy,
