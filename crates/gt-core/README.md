@@ -7,6 +7,8 @@ as a library.
 
 ## What it does
 
+Strategic (normal) form:
+
 | Function | Concept |
 |---|---|
 | `ValidStrategicGame::validate` | structural validation, limits, exact payoff table |
@@ -16,6 +18,16 @@ as a library.
 | `verify_equilibrium` | confirm or refute a claimed equilibrium |
 | `analyze_structure` | Pareto frontier, constant-sum, security levels, welfare |
 | `classify` | prisoner's dilemma, stag hunt, chicken, battle of the sexes, matching pennies |
+
+Extensive (tree) form:
+
+| Function | Concept |
+|---|---|
+| `ValidExtensiveGame::validate` | tree structure, reachability, information-set partition, limits |
+| `to_strategic` | extensive → strategic conversion over complete contingent plans |
+| `plan_to_strategy_index` | locate a tree plan in the converted strategic game |
+| `solve_backward_induction` | all subgame-perfect equilibria, with a per-node decision log |
+| `verify_spe` | confirm or refute a claimed subgame-perfect equilibrium |
 
 ## Exact arithmetic
 
@@ -40,29 +52,55 @@ where a strategy is "almost" dominated.
 - Iterated deletion of *weakly* dominated strategies is order dependent. The
   result is one valid reduction, flagged `order_dependent: true`, not the
   reduction.
+- The tree solvers cover **perfect information only**. `to_strategic`,
+  `solve_backward_induction`, and `verify_spe` return
+  `GtError::ImperfectInformationUnsupported`, naming the offending set, if any
+  information set holds more than one node. The schema carries
+  `information_sets` so it does not break when imperfect-information solving
+  lands, but nothing solves them today.
+- Conversion runs one way. There is no strategic → extensive direction; the
+  strategic form does not determine a tree.
 
 ## Size limits
 
 8 players, 20 strategies per player, 100,000 profiles, 12 strategies per player
-for mixed Nash. Exceeding one returns `GtError::GameTooLarge` naming the limit
-and the actual value. The crate never truncates a game and answers anyway.
+for mixed Nash, 10,000 tree nodes. Exceeding one returns
+`GtError::GameTooLarge` naming the limit and the actual value. The crate never
+truncates a game and answers anyway.
+
+The strategy limits bind the *converted* game too: a tree where one player owns
+many decision nodes has a strategy count that is the product of their action
+counts, so `to_strategic` can return `GameTooLarge` for a tree that validated
+fine on its own.
 
 ## Testing
 
 Unit tests cover named games with known answers. `tests/properties.rs` checks
-eight definitional properties over randomly generated games — reported
-equilibria survive independent verification, mixed-equilibrium supports are
+definitional properties over randomly generated games — reported equilibria
+survive independent verification, mixed-equilibrium supports are
 payoff-equivalent with nothing outside earning more, mixtures sum to exactly
 one, the Pareto frontier is undominated, and no equilibrium pays a player below
 their maxmin value.
 
+For the tree solvers the load-bearing property is the cross-check from Bonanno
+§2.4: every backward-induction solution, read as a profile of complete
+contingent plans, must be a Nash equilibrium of the converted strategic form.
+That is what catches a `to_strategic` that enumerates only on-path actions —
+the single most common way to get dynamic games wrong.
+
+`tests/extensive_fixtures.rs` checks the tree solvers against published
+textbook answers. Each fixture in `tests/fixtures/extensive/` carries a game,
+its solution, and the page of the published answer; see
+`tests/fixtures/README.md`. Dropping a new `.json` there adds a test case.
+
 ## Not in this crate
 
-Extensive-form games, backward induction, repeated games, and dominance by
-mixed strategies are the next increment. Incomplete information — types,
-beliefs, perfect Bayesian equilibrium, separating versus pooling — is a later
-phase. `docs/reference/product-spec-source.md` §7 records which capabilities
-were deferred and why.
+Repeated games and dominance by mixed strategies are the next increment; both
+need an exact rational LP that does not exist yet. Imperfect-information
+solving and incomplete information — types, beliefs, perfect Bayesian
+equilibrium, separating versus pooling — are a later phase.
+`docs/reference/product-spec-source.md` §7 records which capabilities were
+deferred and why.
 
 ## References
 

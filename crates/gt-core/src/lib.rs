@@ -31,6 +31,41 @@
 //! assert_eq!(result.equilibria, vec![vec![1, 1]]);
 //! # Ok::<(), gt_core::GtError>(())
 //! ```
+//!
+//! Extensive-form (game-tree) games take the same route — validate once, then
+//! solve. Backward induction returns every subgame-perfect equilibrium:
+//!
+//! ```
+//! use gt_core::game::Player;
+//! use gt_core::{solve_backward_induction, ExtensiveGame, Node, PayoffKind, ValidExtensiveGame};
+//!
+//! // The Entrant moves first; if it enters, the Incumbent chooses whether to
+//! // fight. Fighting hurts the Incumbent too, so the threat is not credible.
+//! let game = ExtensiveGame {
+//!     players: vec![
+//!         Player { id: 0, name: "Entrant".into() },
+//!         Player { id: 1, name: "Incumbent".into() },
+//!     ],
+//!     root: 0,
+//!     nodes: vec![
+//!         Node::Decision { player: 0, actions: vec![("In".into(), 1), ("Out".into(), 2)] },
+//!         Node::Decision { player: 1, actions: vec![("Fight".into(), 3), ("Accommodate".into(), 4)] },
+//!         Node::Terminal { payoffs: vec![0.0, 2.0] },
+//!         Node::Terminal { payoffs: vec![-1.0, -1.0] },
+//!         Node::Terminal { payoffs: vec![1.0, 1.0] },
+//!     ],
+//!     information_sets: vec![vec![0], vec![1]],
+//!     payoff_kind: PayoffKind::Cardinal,
+//! };
+//!
+//! let game = ValidExtensiveGame::validate(game)?;
+//! let result = solve_backward_induction(&game)?;
+//!
+//! // Unique equilibrium: the Entrant enters and the Incumbent accommodates.
+//! assert_eq!(result.solutions.len(), 1);
+//! assert_eq!(result.solutions[0].path, vec![(0, 0), (1, 1)]);
+//! # Ok::<(), gt_core::GtError>(())
+//! ```
 
 pub mod analyze;
 pub mod error;
