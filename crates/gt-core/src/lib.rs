@@ -66,6 +66,38 @@
 //! assert_eq!(result.solutions[0].path, vec![(0, 0), (1, 1)]);
 //! # Ok::<(), gt_core::GtError>(())
 //! ```
+//!
+//! Repeating a stage game changes what is sustainable. Grim trigger with Nash
+//! reversion gives the exact patience cooperation requires:
+//!
+//! ```
+//! use gt_core::{
+//!     analyze_repeated_game, MatrixForm, PayoffKind, Punishment, Rational,
+//!     StrategicGame, ValidStrategicGame,
+//! };
+//!
+//! let matrix = MatrixForm {
+//!     players: ["Row".into(), "Col".into()],
+//!     row_strategies: vec!["Cooperate".into(), "Defect".into()],
+//!     col_strategies: vec!["Cooperate".into(), "Defect".into()],
+//!     payoff_matrix: vec![
+//!         vec![[3.0, 3.0], [0.0, 4.0]],
+//!         vec![[4.0, 0.0], [1.0, 1.0]],
+//!     ],
+//!     payoff_kind: PayoffKind::Cardinal,
+//! };
+//! let game = ValidStrategicGame::validate(StrategicGame::try_from(matrix)?)?;
+//!
+//! let report = analyze_repeated_game(&game, &[0, 0], Punishment::GrimTrigger, None)?;
+//!
+//! // Mutual cooperation is sustainable exactly when the discount factor
+//! // reaches 1/3 — an exact fraction, not a rounded decimal.
+//! assert_eq!(
+//!     report.critical_discount_factor,
+//!     Some(Rational::new(1.into(), 3.into()))
+//! );
+//! # Ok::<(), gt_core::GtError>(())
+//! ```
 
 pub mod analyze;
 pub mod error;
@@ -75,20 +107,23 @@ pub mod limits;
 pub mod solve;
 
 pub use analyze::{
-    analyze_structure, classify, pareto_dominates, Archetype, ArchetypeReport,
-    DominatedEquilibrium, SecurityLevel, StructureReport,
+    analyze_repeated_game, analyze_structure, classify, pareto_dominates, Archetype,
+    ArchetypeReport, DominatedEquilibrium, PlayerThreshold, Punishment, RepeatedGameReport,
+    SecurityLevel, StructureReport,
 };
 pub use error::{Diagnostic, DiagnosticCode, GtError};
-pub use exact::{solve_linear_system, LinearSolution};
+pub use exact::{solve_linear_system, solve_lp, LinearSolution, LpProblem, LpSolution};
 pub use game::{
     plan_to_strategy_index, to_strategic, ExtensiveGame, MatrixForm, Node, NodeId, Outcome,
     PayoffKind, Player, PlayerId, Profile, Rational, StrategicGame, StrategyId, ValidExtensiveGame,
     ValidStrategicGame,
 };
 pub use solve::{
-    expected_payoff_per_strategy, profitable_deviation, solve_backward_induction, solve_dominance,
-    solve_mixed_nash, solve_pure_nash, verify_equilibrium, verify_spe, BackwardInductionResult,
-    Concept, Deviation, DominanceMode, DominanceResult, EliminationStep, MixedEquilibrium,
-    MixedNashResult, MixedStrategy, NodeDecision, ProfileCheck, PureNashResult, SpeDeviation,
-    SpeSolution, SpeVerifyResult, VerifyResult,
+    expected_payoff_against, expected_payoff_per_strategy, profitable_deviation,
+    solve_backward_induction, solve_dominance, solve_mixed_nash, solve_pure_nash,
+    strictly_dominated_by_mixture, verify_equilibrium, verify_mixed_nash, verify_spe,
+    BackwardInductionResult, Concept, Deviation, DominanceMode, DominanceResult, Dominator,
+    EliminationStep, MixedDeviation, MixedEquilibrium, MixedNashResult, MixedStrategy,
+    MixedVerifyResult, NodeDecision, ProfileCheck, PureNashResult, SpeDeviation, SpeSolution,
+    SpeVerifyResult, SupportViolation, VerifyResult,
 };

@@ -77,6 +77,19 @@ pub enum GtError {
 
     #[error("player {player} has no strategy at profile {profile:?}")]
     UnknownProfile { player: PlayerId, profile: Profile },
+
+    #[error("player {player}'s mixed strategy is not a probability distribution: {reason}")]
+    InvalidMixedStrategy { player: PlayerId, reason: String },
+
+    #[error(
+        "grim-trigger analysis needs a pure-strategy Nash equilibrium of the stage \
+         game to revert to, and this game has none; use solve_mixed_nash to find a \
+         mixed equilibrium, which this version cannot use as a punishment"
+    )]
+    NoPureNashForPunishment,
+
+    #[error("discount factor {value} is outside [0, 1)")]
+    InvalidDiscountFactor { value: String },
 }
 
 impl GtError {

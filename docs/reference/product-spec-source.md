@@ -147,6 +147,18 @@ The design describes `convert_form` as "extensive ↔ strategic". As implemented
 
 The `information_sets` field is populated and validated in v1.0 — it must partition the decision nodes, each set confined to one player with equal action counts — so the schema and its checks do not change when solving arrives.
 
+### 7.5b Mixed-equilibrium verification is its own function, and repeated games are grim-trigger only
+
+Three departures from the design, all settled 2026-07-27 while implementing the mixed-strategy LP increment.
+
+1. *`mixed_nash` is not a `Concept` variant.* The design lists `verify_equilibrium` as taking a concept of `pure_nash | mixed_nash | spe | dominant_strategy`. `verify_equilibrium` takes `&[StrategyId]` — a pure profile — and a mixed profile is a list of probability distributions, not strategy indices. Widening that signature would force every pure-Nash caller to build degenerate mixtures. So mixed verification is `verify_mixed_nash`, a standalone typed function, exactly as `verify_spe` is (§7.5a). Dispatching `concept: mixed_nash` to it is the MCP layer's job, not `gt-core`'s.
+
+2. *`analyze_repeated_game` covers `grim_trigger` only.* The design floats `tit_for_tat` as optional; it is deferred. Tit-for-tat's sustainability conditions need stage-game symmetry assumptions that grim trigger does not, and grim trigger alone answers the price-war and cooperation-dilemma use cases the spec sells. The punishment is reversion to a pure-strategy stage Nash equilibrium rather than the minmax value: minmax is generally not credible, so a minmax-threat δ\* would not be a subgame-perfect answer. A stage game with no pure Nash equilibrium returns `NoPureNashForPunishment` instead of silently switching threat.
+
+   Payoff convention recorded here so it stays citable: **discounted sum**, δ ∈ [0, 1), source Osborne & Rubinstein, *A Course in Game Theory*, ch. 8. This closes the design's open question on repeated-games sourcing; see `bonanno-concept-map.md` §4.
+
+3. *The exact LP does not close the degenerate mixed-Nash gap.* The design notes that completing the degenerate case "needs an exact rational LP solver written from scratch". That LP now exists (`solve_lp`, two-phase simplex over rationals) and is used for mixed dominance, but enumerating equilibria on unequal-size supports is a separate piece of work and was not done. `solve_mixed_nash` still reports `degenerate: true` with a warning. The gap is narrower than it was, not closed.
+
 ### 7.6 Additions not present in the source spec
 
 Agreed during design, in phase order.
