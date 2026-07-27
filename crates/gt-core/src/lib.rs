@@ -79,7 +79,7 @@ pub use analyze::{
     DominatedEquilibrium, SecurityLevel, StructureReport,
 };
 pub use error::{Diagnostic, DiagnosticCode, GtError};
-pub use exact::{solve_linear_system, LinearSolution};
+pub use exact::{solve_linear_system, solve_lp, LinearSolution, LpProblem, LpSolution};
 pub use game::{
     plan_to_strategy_index, to_strategic, ExtensiveGame, MatrixForm, Node, NodeId, Outcome,
     PayoffKind, Player, PlayerId, Profile, Rational, StrategicGame, StrategyId, ValidExtensiveGame,
