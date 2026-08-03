@@ -159,6 +159,22 @@ Three departures from the design, all settled 2026-07-27 while implementing the 
 
 3. *The exact LP does not close the degenerate mixed-Nash gap.* The design notes that completing the degenerate case "needs an exact rational LP solver written from scratch". That LP now exists (`solve_lp`, two-phase simplex over rationals) and is used for mixed dominance, but enumerating equilibria on unequal-size supports is a separate piece of work and was not done. `solve_mixed_nash` still reports `degenerate: true` with a warning. The gap is narrower than it was, not closed.
 
+### 7.5c Domain failures are tool results, not protocol errors
+
+Settled 2026-08-03 while implementing the MCP adapter.
+
+The design's §6 maps the error enum to "MCP errors with stable codes". Returning them as JSON-RPC errors would address the client rather than the model, and some hosts surface only an error's `message` string — which would discard the `diagnostics` list that makes `InvalidGame` actionable, and the `suggestion` that makes every other variant actionable.
+
+**Resolution:** only malformed requests the model cannot act on (unparseable JSON, an unknown tool or concept, a probability that is not an exact fraction) are JSON-RPC errors. Every `GtError` returns as a successful tool call carrying `isError: true` and a structured payload with a stable `code`, the message, a `suggestion`, and per-variant detail. The stable codes §6 promised are preserved; only their transport changes.
+
+One implementation note worth recording, because it is not obvious from the SDK's surface: tools return `CallToolResult` directly and are registered with `ToolRouter::with_route` rather than `with_sync_tool`. That helper routes a tool's output through `Json`, which wraps a `CallToolResult` inside a second one and pins the outer `isError` to false regardless of what the tool decided.
+
+### 7.5d `NoEquilibriumExists` is a result, not an error
+
+The design's §6 table lists a `NoEquilibriumExists` variant, phrased there as "a result, not a failure". The implementation has no such variant: solvers return an empty equilibrium list, and verification returns `holds: false` with the deviation that refutes the claim.
+
+**Resolution:** the code is right and the design text is stale. An empty list *is* the phrasing §6 asked for, and adding an error variant would force callers to treat "Matching Pennies has no pure equilibrium" as a failure. No variant is added; the design text is corrected.
+
 ### 7.6 Additions not present in the source spec
 
 Agreed during design, in phase order.
