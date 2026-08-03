@@ -5,4 +5,6 @@
 //! adapter directly. The binary is `src/main.rs`; it does nothing but install
 //! logging and serve this crate's server over stdio.
 
+pub mod server;
+pub mod tools;
 pub mod wire;

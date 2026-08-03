@@ -3,6 +3,10 @@
 //! stdout carries the JSON-RPC stream. All logging goes to stderr -- a stray
 //! write to stdout corrupts the protocol.
 
+use gt_mcp::server::GtServer;
+use rmcp::transport::io::stdio;
+use rmcp::ServiceExt;
+
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     tracing_subscriber::fmt()
@@ -13,6 +17,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         )
         .init();
 
-    tracing::info!("gt-mcp starting");
+    tracing::info!("gt-mcp listening on stdio");
+    let service = GtServer::new().serve(stdio()).await?;
+    service.waiting().await?;
     Ok(())
 }
