@@ -39,15 +39,25 @@ jobs:
       - uses: Swatinem/rust-cache@v2
       - run: cargo test --workspace --locked
 
-  # Enforces the rust-version declared in the workspace Cargo.toml. Keep the
-  # toolchain below in step with it — an unenforced MSRV is just a claim.
+  # Enforces the rust-version declared per crate. Keep the toolchains below in
+  # step with them — an unenforced MSRV is just a claim.
   # --locked matters here: the floor depends on the resolved dependency graph,
   # so a fresh resolve could raise it without anyone noticing.
-  msrv:
-    name: msrv 1.85
+  msrv-core:
+    name: msrv 1.85 (gt-core)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@1.85
       - uses: Swatinem/rust-cache@v2
-      - run: cargo check --workspace --all-targets --locked
+      - run: cargo check -p gt-core --all-targets --locked
+
+  # gt-mcp sits above the workspace floor because rmcp 3.x requires 1.88.
+  msrv-mcp:
+    name: msrv 1.88 (gt-mcp)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@1.88
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo check -p gt-mcp --all-targets --locked
