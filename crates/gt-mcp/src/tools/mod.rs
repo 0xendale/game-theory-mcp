@@ -3,3 +3,4 @@
 //! synchronous, so there is nothing to await.
 
 pub mod validate;
+pub mod verify;

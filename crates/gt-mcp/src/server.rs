@@ -4,6 +4,7 @@
 //! increments add `read_resource` and `list_prompts` to this same block.
 
 use crate::tools::validate::ValidateGame;
+use crate::tools::verify::VerifyEquilibrium;
 use rmcp::handler::server::router::tool::{SyncTool, ToolBase, ToolRouter};
 use rmcp::handler::server::wrapper::Parameters;
 use rmcp::model::{CallToolResult, Implementation, ServerCapabilities, ServerInfo, Tool};
@@ -57,7 +58,12 @@ impl GtServer {
     }
 
     pub fn tool_router() -> ToolRouter<Self> {
-        ToolRouter::new().with_route((tool_attr::<ValidateGame>(), invoke_sync::<ValidateGame>))
+        ToolRouter::new()
+            .with_route((tool_attr::<ValidateGame>(), invoke_sync::<ValidateGame>))
+            .with_route((
+                tool_attr::<VerifyEquilibrium>(),
+                invoke_sync::<VerifyEquilibrium>,
+            ))
     }
 }
 
