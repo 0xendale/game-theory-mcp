@@ -3,3 +3,4 @@
 //! `JsonSchema`. Round-trip tests keep these in step with their counterparts.
 
 pub mod number;
+pub mod outcome;
