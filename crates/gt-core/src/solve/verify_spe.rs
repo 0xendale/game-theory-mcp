@@ -34,37 +34,72 @@ pub struct SpeVerifyResult {
 /// produces.
 ///
 /// Returns [`GtError::ImperfectInformationUnsupported`] on any non-singleton
-/// information set. Panics if the profile does not give one plan per player
-/// with an action at every decision node: that is a caller bug, not bad game
-/// data, and a silently-wrong answer would be worse.
+/// information set.
+///
+/// A malformed profile — wrong arity, an unknown node, a terminal node, an
+/// out-of-range action, or a decision node left unset — returns
+/// [`GtError::InvalidPlanProfile`] naming the player and the problem. Callers
+/// include protocol adapters relaying profiles they did not construct, so this
+/// is bad input rather than a contract violation.
 pub fn verify_spe(
     game: &ValidExtensiveGame,
     profile: &[Vec<(NodeId, StrategyId)>],
 ) -> Result<SpeVerifyResult, GtError> {
     game.require_perfect_information()?;
-    assert_eq!(
-        profile.len(),
-        game.n_players(),
-        "a profile must give one plan per player"
-    );
+
+    if profile.len() != game.n_players() {
+        return Err(GtError::InvalidPlanProfile {
+            player: 0,
+            reason: format!(
+                "a profile must give one plan per player: got {} plan(s) for {} player(s)",
+                profile.len(),
+                game.n_players()
+            ),
+        });
+    }
 
     // Flatten to a per-node action map for O(1) lookup during the fold.
     let mut action_at: Vec<Option<StrategyId>> = vec![None; game.nodes().len()];
-    for plan in profile {
+    for (player, plan) in profile.iter().enumerate() {
         for &(node, action) in plan {
+            if node >= game.nodes().len() {
+                return Err(GtError::InvalidPlanProfile {
+                    player,
+                    reason: format!(
+                        "node {node} does not exist; this tree has {} node(s)",
+                        game.nodes().len()
+                    ),
+                });
+            }
+            let Node::Decision { actions, .. } = &game.nodes()[node] else {
+                return Err(GtError::InvalidPlanProfile {
+                    player,
+                    reason: format!("node {node} is terminal, so no action can be fixed at it"),
+                });
+            };
+            if action >= actions.len() {
+                return Err(GtError::InvalidPlanProfile {
+                    player,
+                    reason: format!(
+                        "node {node} has {} action(s), so action index {action} is out of range",
+                        actions.len()
+                    ),
+                });
+            }
             action_at[node] = Some(action);
         }
     }
+
     for (id, node) in game.nodes().iter().enumerate() {
-        if let Node::Decision { actions, .. } = node {
-            let chosen = action_at[id].unwrap_or_else(|| {
-                panic!("a profile must fix an action at every decision node; node {id} is unset")
-            });
-            assert!(
-                chosen < actions.len(),
-                "node {id} has {} actions, profile chose {chosen}",
-                actions.len()
-            );
+        if let Node::Decision { player, .. } = node {
+            if action_at[id].is_none() {
+                return Err(GtError::InvalidPlanProfile {
+                    player: *player,
+                    reason: format!(
+                        "a plan must fix an action at every decision node, and node {id} is unset"
+                    ),
+                });
+            }
         }
     }
 
@@ -378,17 +413,47 @@ mod tests {
     }
 
     #[test]
-    #[should_panic(expected = "one plan per player")]
-    fn a_profile_of_the_wrong_arity_panics() {
+    fn a_profile_of_the_wrong_arity_is_rejected() {
         let g = entry_deterrence();
-        let _ = verify_spe(&g, &[vec![(0, 0)]]);
+        let err = verify_spe(&g, &[vec![(0, 0)]]).unwrap_err();
+        assert!(
+            matches!(err, GtError::InvalidPlanProfile { player, ref reason }
+                if player == 0 && reason.contains("one plan per player")),
+            "got {err:?}"
+        );
     }
 
     #[test]
-    #[should_panic(expected = "every decision node")]
-    fn a_profile_missing_a_node_panics() {
+    fn a_profile_missing_a_node_is_rejected() {
         let g = entry_deterrence();
         // Player 1's plan omits node 1.
-        let _ = verify_spe(&g, &[vec![(0, 0)], vec![]]);
+        let err = verify_spe(&g, &[vec![(0, 0)], vec![]]).unwrap_err();
+        assert!(
+            matches!(err, GtError::InvalidPlanProfile { player, ref reason }
+                if player == 1 && reason.contains("node 1")),
+            "got {err:?}"
+        );
+    }
+
+    #[test]
+    fn a_node_id_out_of_range_is_rejected() {
+        let g = entry_deterrence();
+        let err = verify_spe(&g, &[vec![(99, 0)], vec![(1, 0)]]).unwrap_err();
+        assert!(
+            matches!(err, GtError::InvalidPlanProfile { player, ref reason }
+                if player == 0 && reason.contains("99")),
+            "got {err:?}"
+        );
+    }
+
+    #[test]
+    fn an_action_index_out_of_range_is_rejected() {
+        let g = entry_deterrence();
+        let err = verify_spe(&g, &[vec![(0, 0)], vec![(1, 99)]]).unwrap_err();
+        assert!(
+            matches!(err, GtError::InvalidPlanProfile { player, ref reason }
+                if player == 1 && reason.contains("99")),
+            "got {err:?}"
+        );
     }
 }
