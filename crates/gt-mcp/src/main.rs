@@ -1,7 +1,7 @@
-//! MCP adapter for `gt-core`. Tool registration, wire types, and error
-//! mapping only -- every number in a response comes from `gt-core`.
+//! The `gt-mcp` binary: install logging, then serve over stdio.
 //!
-//! stdout carries the JSON-RPC stream. All logging goes to stderr.
+//! stdout carries the JSON-RPC stream. All logging goes to stderr -- a stray
+//! write to stdout corrupts the protocol.
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
