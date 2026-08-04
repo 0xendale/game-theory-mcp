@@ -7,10 +7,20 @@ on:
 env:
   CARGO_TERM_COLOR: always
 
+# rust-toolchain.toml pins the day-to-day toolchain so a contributor's default
+# compiler cannot be older than the workspace needs. That file outranks the
+# `rustup default` the toolchain action sets, so without an explicit
+# RUSTUP_TOOLCHAIN every job below would silently build with the pinned version
+# instead of the one it names -- and the MSRV legs would pass unconditionally
+# while still printing the toolchain they meant to test. RUSTUP_TOOLCHAIN
+# outranks the file, so each job states its own toolchain and means it.
+
 jobs:
   fmt:
     name: fmt
     runs-on: ubuntu-latest
+    env:
+      RUSTUP_TOOLCHAIN: stable
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
@@ -22,6 +32,8 @@ jobs:
   clippy:
     name: clippy
     runs-on: ubuntu-latest
+    env:
+      RUSTUP_TOOLCHAIN: stable
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
@@ -33,21 +45,39 @@ jobs:
   test:
     name: test
     runs-on: ubuntu-latest
+    env:
+      RUSTUP_TOOLCHAIN: stable
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
       - run: cargo test --workspace --locked
 
-  # Enforces the rust-version declared in the workspace Cargo.toml. Keep the
-  # toolchain below in step with it — an unenforced MSRV is just a claim.
+  # Enforces the rust-version declared per crate. Keep the toolchains below in
+  # step with them — an unenforced MSRV is just a claim.
   # --locked matters here: the floor depends on the resolved dependency graph,
   # so a fresh resolve could raise it without anyone noticing.
-  msrv:
-    name: msrv 1.85
+  msrv-core:
+    name: msrv 1.85 (gt-core)
     runs-on: ubuntu-latest
+    env:
+      RUSTUP_TOOLCHAIN: "1.85"
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@1.85
       - uses: Swatinem/rust-cache@v2
-      - run: cargo check --workspace --all-targets --locked
+      - run: rustc --version | grep -q '1\.85' # the pin above must actually hold
+      - run: cargo check -p gt-core --all-targets --locked
+
+  # gt-mcp sits above the workspace floor because rmcp 3.x requires 1.88.
+  msrv-mcp:
+    name: msrv 1.88 (gt-mcp)
+    runs-on: ubuntu-latest
+    env:
+      RUSTUP_TOOLCHAIN: "1.88"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@1.88
+      - uses: Swatinem/rust-cache@v2
+      - run: rustc --version | grep -q '1\.88' # the pin above must actually hold
+      - run: cargo check -p gt-mcp --all-targets --locked

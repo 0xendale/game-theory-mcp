@@ -81,6 +81,9 @@ pub enum GtError {
     #[error("player {player}'s mixed strategy is not a probability distribution: {reason}")]
     InvalidMixedStrategy { player: PlayerId, reason: String },
 
+    #[error("player {player}'s plan is not a valid plan for this tree: {reason}")]
+    InvalidPlanProfile { player: PlayerId, reason: String },
+
     #[error(
         "grim-trigger analysis needs a pure-strategy Nash equilibrium of the stage \
          game to revert to, and this game has none; use solve_mixed_nash to find a \

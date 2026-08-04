@@ -1,0 +1,23 @@
+[package]
+name = "gt-mcp"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+# rmcp 3.x requires 1.88. gt-core deliberately stays at the workspace floor of
+# 1.85 -- it is the reusable half and its mathematics needs nothing newer.
+rust-version = "1.88"
+
+[dependencies]
+gt-core = { path = "../gt-core" }
+rmcp.workspace = true
+schemars.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+num-rational.workspace = true
+num-traits.workspace = true
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["macros", "rt-multi-thread", "io-std", "io-util", "process", "time"] }
