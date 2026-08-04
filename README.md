@@ -35,14 +35,18 @@ answer out, every time.
 | Crate | Role |
 |---|---|
 | [`gt-core`](crates/gt-core) | All mathematics. No MCP, async, or I/O — every algorithm is testable without protocol machinery. |
-| `gt-mcp` | MCP adapter over `gt-core`. Contains no arithmetic. Not yet written. |
+| `gt-mcp` | MCP adapter over `gt-core`. Tool registration, wire types, error mapping; contains no arithmetic. |
 
 ## Status
 
-Pre-release. `gt-core` handles strategic-form (simultaneous-move) games:
+Pre-release. The mathematics is largely complete; the server exposes two tools
+so far.
+
+`gt-core` handles strategic-form (simultaneous-move) games:
 
 - validation, with size limits and every problem reported at once
-- iterated deletion of dominated strategies
+- iterated deletion of dominated strategies, including dominance by *mixed*
+  strategies via an exact rational LP
 - all pure-strategy Nash equilibria, any number of players
 - exact mixed-strategy Nash equilibria for two players
 - equilibrium verification — confirms a claimed equilibrium or returns the
@@ -51,9 +55,45 @@ Pre-release. `gt-core` handles strategic-form (simultaneous-move) games:
 - classification against named archetypes: prisoner's dilemma, stag hunt,
   chicken, battle of the sexes, matching pennies
 
-Next: extensive-form (sequential) games, backward induction, and repeated games.
-Then the MCP server itself. Mechanism design — second-price auctions, VCG — and
-games of incomplete information come after that.
+and extensive-form (sequential) games:
+
+- tree validation — reachability, acyclicity, information-set partitioning
+- backward induction returning every subgame-perfect equilibrium, with a
+  per-node decision log
+- subgame-perfection verification, which catches non-credible threats sitting
+  at unreached nodes
+- conversion to strategic form, handling the plans-at-unreachable-nodes rule
+  that makes the conversion easy to get wrong
+
+and infinitely repeated games: grim trigger with Nash reversion, returning the
+exact critical discount factor above which a target profile is sustainable.
+
+`gt-mcp` currently serves `validate_game` and `verify_equilibrium` over stdio.
+The remaining solvers, the `gt://concepts/*` resources, and the formalization
+prompts follow the pattern those two establish. Mechanism design — second-price
+auctions, VCG — and games of incomplete information come after that.
+
+## Running the server
+
+```sh
+cargo build --release -p gt-mcp
+```
+
+Point an MCP client at the resulting binary:
+
+```json
+{ "mcpServers": { "game-theory": { "command": "/path/to/target/release/gt-mcp" } } }
+```
+
+Two tools are available. `validate_game` normalizes and checks a game, in
+matrix, strategic, or extensive form, reporting every problem it finds rather
+than the first. `verify_equilibrium` checks a claimed equilibrium under
+`pure_nash`, `dominant_strategy`, `mixed_nash`, or `spe`, and returns the
+profitable deviation when the claim does not hold.
+
+A malformed game comes back as a tool result carrying diagnostics and a
+suggested fix, not as a protocol error — the model is the one that has to
+correct it, so it needs to be able to read it.
 
 ## Exact arithmetic
 
@@ -81,13 +121,19 @@ Answers state their own scope rather than overreaching:
 ## Development
 
 ```sh
-cargo test --workspace     # 73 unit + 8 property + 1 doc test
+cargo test --workspace     # 211 unit + 16 property + 4 end-to-end + 1 fixture + 3 doc
 cargo clippy --all-targets --all-features -- -D warnings
 cargo fmt --all --check
 ```
 
-Minimum supported Rust version is 1.85, enforced in CI. `Cargo.lock` is
-committed, so dependency changes appear as an explicit diff under review.
+The two crates have different minimum Rust versions, each enforced by its own
+CI leg. `gt-core` requires **1.85**; `gt-mcp` requires **1.88**, because `rmcp`
+3.x does. Keeping them separate costs one CI job and preserves `gt-core`'s
+portability — it is the reusable half, and nothing in its mathematics needs the
+newer compiler. Building the workspace therefore needs 1.88 or later.
+
+`Cargo.lock` is committed, so dependency changes appear as an explicit diff
+under review.
 
 ## Documentation
 
