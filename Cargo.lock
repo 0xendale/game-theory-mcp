@@ -267,6 +267,35 @@ dependencies = [
 ]
 
 [[package]]
+name = "game-theory-core"
+version = "0.1.0"
+dependencies = [
+ "num-bigint",
+ "num-rational",
+ "num-traits",
+ "proptest",
+ "serde",
+ "serde_json",
+ "thiserror",
+]
+
+[[package]]
+name = "game-theory-mcp"
+version = "0.1.0"
+dependencies = [
+ "game-theory-core",
+ "num-rational",
+ "num-traits",
+ "rmcp",
+ "schemars",
+ "serde",
+ "serde_json",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+]
+
+[[package]]
 name = "getrandom"
 version = "0.3.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -287,35 +316,6 @@ dependencies = [
  "cfg-if",
  "libc",
  "r-efi 6.0.0",
-]
-
-[[package]]
-name = "gt-core"
-version = "0.1.0"
-dependencies = [
- "num-bigint",
- "num-rational",
- "num-traits",
- "proptest",
- "serde",
- "serde_json",
- "thiserror",
-]
-
-[[package]]
-name = "gt-mcp"
-version = "0.1.0"
-dependencies = [
- "gt-core",
- "num-rational",
- "num-traits",
- "rmcp",
- "schemars",
- "serde",
- "serde_json",
- "tokio",
- "tracing",
- "tracing-subscriber",
 ]
 
 [[package]]

@@ -164,6 +164,6 @@ The book contains **165 exercises with complete published solutions**, distribut
 | 14 | 7 | 535 | 541 | phase 2 |
 | 15 | 4 | 566 | 570 | phase 2 |
 
-**Plan:** transcribe the ch. 1, 2, and 5 exercises whose solutions are fully determined (roughly 50 items) into `gt-core/tests/fixtures/*.json`, each fixture carrying the book page of its published solution. These are the acceptance tests for v1.0 solvers — a solver is not done until it reproduces the textbook answers.
+**Plan:** transcribe the ch. 1, 2, and 5 exercises whose solutions are fully determined (roughly 50 items) into `game-theory-core/tests/fixtures/*.json`, each fixture carrying the book page of its published solution. These are the acceptance tests for v1.0 solvers — a solver is not done until it reproduces the textbook answers.
 
 Transcribe only the game data and the answer, not the book's prose. CC BY-NC-ND permits neither redistribution of the text nor derivative works; encoding a payoff matrix as JSON and citing the page is fine, copying the exercise text into the repository is not.

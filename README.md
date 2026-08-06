@@ -34,16 +34,16 @@ answer out, every time.
 
 | Crate | Role |
 |---|---|
-| [`gt-core`](crates/gt-core) | All mathematics. No MCP, async, or I/O — every algorithm is testable without protocol machinery. |
-| `gt-mcp` | MCP adapter over `gt-core`. Tool registration, wire types, error mapping; contains no arithmetic. |
+| [`game-theory-core`](crates/game-theory-core) | All mathematics. No MCP, async, or I/O — every algorithm is testable without protocol machinery. |
+| `game-theory-mcp` | MCP adapter over `game-theory-core`. Tool registration, wire types, error mapping; contains no arithmetic. |
 
 ## Status
 
-Pre-release. The v1.0 surface is complete: every solver `gt-core` implements is
-exposed as an MCP tool, alongside the concept resources and formalization
-prompts.
+Pre-release. The v1.0 surface is complete: every solver `game-theory-core`
+implements is exposed as an MCP tool, alongside the concept resources and
+formalization prompts.
 
-`gt-core` handles strategic-form (simultaneous-move) games:
+`game-theory-core` handles strategic-form (simultaneous-move) games:
 
 - validation, with size limits and every problem reported at once
 - iterated deletion of dominated strategies, including dominance by *mixed*
@@ -69,20 +69,20 @@ and extensive-form (sequential) games:
 and infinitely repeated games: grim trigger with Nash reversion, returning the
 exact critical discount factor above which a target profile is sustainable.
 
-`gt-mcp` serves all nine tools over stdio, plus six `gt://concepts/*` resources
-and three formalization prompts. Mechanism design — second-price auctions, VCG —
-and games of incomplete information come next.
+`game-theory-mcp` serves all nine tools over stdio, plus six `gt://concepts/*`
+resources and three formalization prompts. Mechanism design — second-price
+auctions, VCG — and games of incomplete information come next.
 
 ## Running the server
 
 ```sh
-cargo build --release -p gt-mcp
+cargo build --release -p game-theory-mcp
 ```
 
 Point an MCP client at the resulting binary:
 
 ```json
-{ "mcpServers": { "game-theory": { "command": "/path/to/target/release/gt-mcp" } } }
+{ "mcpServers": { "game-theory": { "command": "/path/to/target/release/game-theory-mcp" } } }
 ```
 
 ### Tools
@@ -150,8 +150,8 @@ cargo fmt --all --check
 The workspace requires Rust **1.88**, set once in `[workspace.package]`,
 inherited by both crates and enforced by a CI leg that checks the whole
 workspace on that exact toolchain. The floor comes from `rmcp` 3.x; nothing in
-`gt-core`'s mathematics needs a compiler that new, but a single number is one
-fewer thing to keep in step.
+`game-theory-core`'s mathematics needs a compiler that new, but a single number
+is one fewer thing to keep in step.
 
 `Cargo.lock` is committed, so dependency changes appear as an explicit diff
 under review.
@@ -178,4 +178,7 @@ repeated games, notably — the source used is named instead of implied.
 
 ## License
 
-MIT OR Apache-2.0
+MIT — see [LICENSE](LICENSE).
+
+The Bonanno textbook cited above is a separate third-party work under its own
+terms and is not distributed here.
