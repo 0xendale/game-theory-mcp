@@ -39,8 +39,9 @@ answer out, every time.
 
 ## Status
 
-Pre-release. The mathematics is largely complete; the server exposes two tools
-so far.
+Pre-release. The v1.0 surface is complete: every solver `gt-core` implements is
+exposed as an MCP tool, alongside the concept resources and formalization
+prompts.
 
 `gt-core` handles strategic-form (simultaneous-move) games:
 
@@ -68,10 +69,9 @@ and extensive-form (sequential) games:
 and infinitely repeated games: grim trigger with Nash reversion, returning the
 exact critical discount factor above which a target profile is sustainable.
 
-`gt-mcp` currently serves `validate_game` and `verify_equilibrium` over stdio.
-The remaining solvers, the `gt://concepts/*` resources, and the formalization
-prompts follow the pattern those two establish. Mechanism design — second-price
-auctions, VCG — and games of incomplete information come after that.
+`gt-mcp` serves all nine tools over stdio, plus six `gt://concepts/*` resources
+and three formalization prompts. Mechanism design — second-price auctions, VCG —
+and games of incomplete information come next.
 
 ## Running the server
 
@@ -85,15 +85,36 @@ Point an MCP client at the resulting binary:
 { "mcpServers": { "game-theory": { "command": "/path/to/target/release/gt-mcp" } } }
 ```
 
-Two tools are available. `validate_game` normalizes and checks a game, in
-matrix, strategic, or extensive form, reporting every problem it finds rather
-than the first. `verify_equilibrium` checks a claimed equilibrium under
-`pure_nash`, `dominant_strategy`, `mixed_nash`, or `spe`, and returns the
-profitable deviation when the claim does not hold.
+### Tools
 
-A malformed game comes back as a tool result carrying diagnostics and a
-suggested fix, not as a protocol error — the model is the one that has to
+| Tool | What it does |
+|---|---|
+| `validate_game` | Normalizes and checks a game in matrix, strategic, or extensive form, reporting every problem it finds rather than the first. |
+| `convert_form` | Extensive → strategic, returning the plan each generated strategy stands for — the mapping without which the converted matrix cannot be read. |
+| `solve_dominance` | Iterated deletion, `strict`, `weak`, or `both`, with the per-round elimination log. Weak results carry an order-dependence warning. |
+| `solve_pure_nash` | Every pure-strategy equilibrium, any player count, plus the table the answer was read off. |
+| `solve_mixed_nash` | Two-player exact mixed equilibria as fractions, flagging degeneracy rather than presenting a possibly-partial list as exhaustive. |
+| `solve_backward_induction` | Every subgame-perfect solution of a perfect-information tree, with a per-node decision log. Ties return all solutions, never one picked silently. |
+| `verify_equilibrium` | Checks a claimed equilibrium under `pure_nash`, `dominant_strategy`, `mixed_nash`, or `spe`, returning the profitable deviation when the claim fails. |
+| `analyze_payoff_structure` | Pareto frontier, constant-sum detection, security levels, welfare gap, and archetype classification reported as the criteria matched, not a bare label. |
+| `analyze_repeated_game` | The exact critical discount factor above which a target profile survives under grim trigger. |
+
+A game with no equilibrium under the requested concept returns an empty list,
+not an error. A malformed game comes back as a tool result carrying diagnostics
+and a suggested fix, not as a protocol error — the model is the one that has to
 correct it, so it needs to be able to read it.
+
+### Resources and prompts
+
+Six concept resources at `gt://concepts/{nash, dominance, subgame-perfect,
+mixed-strategies, archetypes, repeated-games}` explain each concept in the terms
+the tools use and name the tool that computes it, with textbook citations.
+
+Three prompts — `formalize_scenario`, `analyze_competitive_dynamic`,
+`design_incentive_scheme` — guide the host model through turning a situation
+into a game: picking players, enumerating strategies, deciding whether payoffs
+are ordinal or cardinal. The server never parses prose; it does the arithmetic
+once the model has formalized the problem.
 
 ## Exact arithmetic
 
@@ -121,16 +142,16 @@ Answers state their own scope rather than overreaching:
 ## Development
 
 ```sh
-cargo test --workspace     # 211 unit + 16 property + 4 end-to-end + 1 fixture + 3 doc
+cargo test --workspace     # 304 unit + 16 property + 16 end-to-end + 1 fixture + 3 doc
 cargo clippy --all-targets --all-features -- -D warnings
 cargo fmt --all --check
 ```
 
-The two crates have different minimum Rust versions, each enforced by its own
-CI leg. `gt-core` requires **1.85**; `gt-mcp` requires **1.88**, because `rmcp`
-3.x does. Keeping them separate costs one CI job and preserves `gt-core`'s
-portability — it is the reusable half, and nothing in its mathematics needs the
-newer compiler. Building the workspace therefore needs 1.88 or later.
+The workspace requires Rust **1.88**, set once in `[workspace.package]`,
+inherited by both crates and enforced by a CI leg that checks the whole
+workspace on that exact toolchain. The floor comes from `rmcp` 3.x; nothing in
+`gt-core`'s mathematics needs a compiler that new, but a single number is one
+fewer thing to keep in step.
 
 `Cargo.lock` is committed, so dependency changes appear as an explicit diff
 under review.
