@@ -1,9 +1,17 @@
 # game-theory-core
 
+[![crates.io](https://img.shields.io/crates/v/game-theory-core.svg)](https://crates.io/crates/game-theory-core)
+[![docs.rs](https://docs.rs/game-theory-core/badge.svg)](https://docs.rs/game-theory-core)
+[![license](https://img.shields.io/crates/l/game-theory-core.svg)](https://github.com/0xendale/game-theory-mcp/blob/main/LICENSE)
+
 Exact game-theoretic computation. No I/O, no async, no protocol handling.
 
-`game-theory-mcp` is the MCP adapter over this crate; this crate is usable on
-its own as a library.
+```sh
+cargo add game-theory-core
+```
+
+[`game-theory-mcp`](https://crates.io/crates/game-theory-mcp) is the MCP
+adapter over this crate; this crate is usable on its own as a library.
 
 ## What it does
 

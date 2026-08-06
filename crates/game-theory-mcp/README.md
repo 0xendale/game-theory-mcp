@@ -1,5 +1,8 @@
 # game-theory-mcp
 
+[![crates.io](https://img.shields.io/crates/v/game-theory-mcp.svg)](https://crates.io/crates/game-theory-mcp)
+[![license](https://img.shields.io/crates/l/game-theory-mcp.svg)](https://github.com/0xendale/game-theory-mcp/blob/main/LICENSE)
+
 An MCP server that gives an LLM exact game-theoretic computation. Nine tools,
 six concept resources, three formalization prompts, over stdio.
 
