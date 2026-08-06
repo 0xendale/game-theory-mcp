@@ -3,9 +3,7 @@ name = "gt-mcp"
 version = "0.1.0"
 edition.workspace = true
 license.workspace = true
-# rmcp 3.x requires 1.88. gt-core deliberately stays at the workspace floor of
-# 1.85 -- it is the reusable half and its mathematics needs nothing newer.
-rust-version = "1.88"
+rust-version.workspace = true
 
 [dependencies]
 gt-core = { path = "../gt-core" }

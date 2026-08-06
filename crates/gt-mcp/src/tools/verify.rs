@@ -496,20 +496,5 @@ mod tests {
         assert_eq!(value(&out)["code"], "ordinal_payoffs_rejected");
     }
 
-    #[test]
-    fn the_router_registers_both_tools() {
-        let names: Vec<String> = GtServer::tool_router()
-            .list_all()
-            .iter()
-            .map(|t| t.name.to_string())
-            .collect();
-        assert!(
-            names.contains(&"validate_game".to_string()),
-            "got {names:?}"
-        );
-        assert!(
-            names.contains(&"verify_equilibrium".to_string()),
-            "got {names:?}"
-        );
-    }
+    // Registration is asserted once for the whole surface, in server.rs.
 }
