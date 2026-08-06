@@ -1,5 +1,9 @@
 # game-theory-mcp
 
+[![crates.io](https://img.shields.io/crates/v/game-theory-mcp.svg)](https://crates.io/crates/game-theory-mcp)
+[![docs.rs](https://docs.rs/game-theory-core/badge.svg)](https://docs.rs/game-theory-core)
+[![license](https://img.shields.io/crates/l/game-theory-mcp.svg)](LICENSE)
+
 An MCP server that gives an LLM exact game-theoretic computation — equilibrium
 solving, dominance analysis, and structural classification of strategic
 interactions, computed rather than estimated.
@@ -34,14 +38,14 @@ answer out, every time.
 
 | Crate | Role |
 |---|---|
-| [`game-theory-core`](crates/game-theory-core) | All mathematics. No MCP, async, or I/O — every algorithm is testable without protocol machinery. |
-| `game-theory-mcp` | MCP adapter over `game-theory-core`. Tool registration, wire types, error mapping; contains no arithmetic. |
+| [`game-theory-core`](crates/game-theory-core) ([crates.io](https://crates.io/crates/game-theory-core)) | All mathematics. No MCP, async, or I/O — every algorithm is testable without protocol machinery, and the crate is usable on its own as a library. |
+| [`game-theory-mcp`](crates/game-theory-mcp) ([crates.io](https://crates.io/crates/game-theory-mcp)) | MCP adapter over `game-theory-core`. Tool registration, wire types, error mapping; contains no arithmetic. |
 
 ## Status
 
-Pre-release. The v1.0 surface is complete: every solver `game-theory-core`
-implements is exposed as an MCP tool, alongside the concept resources and
-formalization prompts.
+v0.1.0, published. The v1.0 surface is complete: every solver
+`game-theory-core` implements is exposed as an MCP tool, alongside the concept
+resources and formalization prompts.
 
 `game-theory-core` handles strategic-form (simultaneous-move) games:
 
@@ -76,14 +80,17 @@ auctions, VCG — and games of incomplete information come next.
 ## Running the server
 
 ```sh
-cargo build --release -p game-theory-mcp
+cargo install game-theory-mcp
 ```
 
-Point an MCP client at the resulting binary:
+Point an MCP client at the installed binary:
 
 ```json
-{ "mcpServers": { "game-theory": { "command": "/path/to/target/release/game-theory-mcp" } } }
+{ "mcpServers": { "game-theory": { "command": "game-theory-mcp" } } }
 ```
+
+To run from a checkout instead, `cargo build --release -p game-theory-mcp` and
+point the client at `target/release/game-theory-mcp`.
 
 ### Tools
 
