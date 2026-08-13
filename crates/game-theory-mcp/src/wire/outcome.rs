@@ -60,7 +60,15 @@ impl<T: Serialize + JsonSchema> ToolOutput<T> {
 pub fn output_schema_of<T: JsonSchema>() -> Option<Arc<JsonObject>> {
     let schema = schemars::SchemaGenerator::default().root_schema_for::<T>();
     match serde_json::to_value(schema).ok()? {
-        serde_json::Value::Object(map) => Some(Arc::new(map)),
+        serde_json::Value::Object(mut map) => {
+            // The MCP spec requires outputSchema to declare `type: "object"`.
+            // An untagged enum's schemars root is `anyOf` over `$defs` with no
+            // top-level `type`, which strict clients reject at tools/list.
+            // Both envelope arms are objects, so the declaration stays true.
+            map.entry("type")
+                .or_insert_with(|| serde_json::Value::String("object".into()));
+            Some(Arc::new(map))
+        }
         _ => None,
     }
 }
@@ -427,6 +435,16 @@ mod tests {
         assert!(
             text.contains("holds"),
             "schema should describe the payload: {text}"
+        );
+    }
+
+    #[test]
+    fn the_output_schema_declares_type_object_as_the_spec_requires() {
+        let schema = output_schema_of::<ToolOutput<Payload>>().unwrap();
+        assert_eq!(
+            schema.get("type"),
+            Some(&serde_json::Value::String("object".into())),
+            "strict MCP clients reject tools/list when outputSchema lacks type"
         );
     }
 

@@ -1,0 +1,26 @@
+id: ranked-pick-rates
+title: Ranked duel pick rates — is there a best pick?
+persona: Game designer balancing a 1v1 hero duel mode
+prompt: |
+  I'm designing a 1v1 duel. Each player secretly picks one of two stances,
+  then both reveal. The attacker's stances are Aggro and Safe; the defender's
+  are Counter and Mirror.
+
+  Net rating change: Aggro into Counter: attacker +1, defender -1. Aggro into
+  Mirror: attacker -1, defender +1. Safe into Counter: attacker -1, defender
+  +1. Safe into Mirror: attacker +1, defender -1.
+
+  Three questions for balance review: (1) Is there a single best stance for
+  either side? (2) What pick rates make a player unexploitable at high MMR —
+  exact numbers, please. (3) Is this mode zero-sum?
+expected_tools: [solve_mixed_nash, analyze_payoff_structure]
+assertions:
+  - id: no-pure-best
+    desc: states no stance is dominant / no pure equilibrium exists
+    any_of: ['no (single )?(best|dominant|winning)', 'no pure', 'not.{0,15}dominan', 'no.{0,20}guaranteed']
+  - id: fifty-fifty
+    desc: gives the 1/2 - 1/2 mix
+    any_of: ['1/2', '50.{0,4}50', '\b50%', '0\.5\b']
+  - id: zero-sum
+    desc: confirms the mode is zero-sum (or constant-sum)
+    any_of: ['zero.?sum', 'constant.?sum']

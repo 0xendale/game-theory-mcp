@@ -1,0 +1,27 @@
+id: perk-pruning-order
+title: Perk pruning — which options are safe to delete?
+persona: Systems designer trimming a character-perk tree before launch
+prompt: |
+  We're trimming our perk tree. Us: perks P, Q, R. The opposing build has
+  stances X and Y. Power budget payoffs (ours, theirs):
+
+  P vs X: (1, 1). P vs Y: (2, 0).
+  Q vs X: (1, 1). Q vs Y: (0, 2).
+  R vs X: (0, 0). R vs Y: (1, 1).
+
+  I want to delete options that are never a rational pick and ship the reduced
+  set. Two of my designers ran "delete anything dominated, repeat until stable"
+  and got different final sets, which shouldn't be possible — or should it?
+  Give me the definitive answer: which options survive, and was the
+  disagreement a bug or a real phenomenon?
+expected_tools: [solve_dominance]
+assertions:
+  - id: order-dependence
+    desc: recognizes iterated weak dominance is order-dependent — the disagreement is real
+    any_of: ['order', 'sequence', 'real phenomenon', 'not a bug', 'both.{0,20}(correct|valid)']
+  - id: strict-keeps-pq
+    desc: strict-only deletion removes only R, keeping P, Q, X, Y
+    any_of: ['only R', 'R is the only', 'R.{0,30}(only|sole)', 'keep.{0,20}(P and Q|P, Q)']
+  - id: weak-can-prune-more
+    desc: notes weak deletion can prune down further (toward P and X) but not uniquely
+    any_of: ['weak.{0,60}(P.{0,10}X|further|more)', '(P.{0,5}X).{0,60}weak', 'P and X|both P and X']

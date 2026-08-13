@@ -1,0 +1,25 @@
+id: platform-shift-coordination
+title: Platform migration — why is everyone stuck on Legacy?
+persona: Creator-economy PM studying a two-platform market
+prompt: |
+  Two big creator collectives dominate our market. Each independently decides
+  where to publish next season: the New platform or the Legacy one.
+
+  Season revenue in $M: if both go New, each makes 4 (network effects). If both
+  stay on Legacy, each makes 2. If they split — one on New, one on Legacy —
+  the one on New makes 0 (no audience) and the one on Legacy keeps 2.
+
+  Questions: which outcomes are stable? Is "everyone migrates to New" stable?
+  And why might the market stay stuck on Legacy even though everyone would be
+  richer on New?
+expected_tools: [solve_pure_nash, analyze_payoff_structure]
+assertions:
+  - id: two-equilibria
+    desc: identifies both pure equilibria (both-New and both-Legacy)
+    any_of: ['two (pure )?(Nash )?equilibri', 'both.{0,30}equilibri', 'equilibria.{0,40}(new|legacy)']
+  - id: pareto-better
+    desc: notes both-New is strictly better for both (Pareto-dominant)
+    any_of: ['pareto', 'better for both', 'everyone.{0,20}(richer|better off)', 'both.{0,15}4']
+  - id: risk-story
+    desc: explains the stuck-on-Legacy outcome as risk/coordination failure
+    any_of: ['risk', 'safer|safe choice', 'stuck', 'coordination (failure|problem)', 'fear.{0,30}(alone|stranded|mismatch)']

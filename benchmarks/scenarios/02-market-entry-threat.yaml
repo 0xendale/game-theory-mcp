@@ -1,0 +1,25 @@
+id: market-entry-threat
+title: Incumbent's price-war threat — believe it?
+persona: Product strategy lead at a startup entering an incumbent's market
+prompt: |
+  We're deciding whether to launch into a market owned by one big incumbent.
+  Their CEO just said publicly: "If they enter, we will fight a price war until
+  they bleed out."
+
+  Annual profit in $M: if we stay out, we get 0 and they keep 2. If we enter
+  and they actually fight, both sides lose 1. If we enter and they share the
+  market instead, we each make 1.
+
+  Should we take the threat seriously? What do you expect each side to do if we
+  launch? Walk me through the reasoning.
+expected_tools: [solve_backward_induction]
+assertions:
+  - id: recommends-entry
+    desc: recommends entering/launching despite the threat
+    any_of: ['\benter\b', '\blaunch\b', 'go ahead', 'proceed']
+  - id: threat-not-credible
+    desc: identifies the fight threat as non-credible / expects accommodation
+    any_of: ['not credible', 'non-credible', 'empty threat', 'accommodat', 'share the market', 'would(n.t| not) (actually )?fight', 'back.{0,10}down']
+  - id: backward-reasoning
+    desc: reasons from the end of the game backwards (subgame-perfect logic)
+    any_of: ['backward induction', 'work.{0,15}backward', 'reason.{0,20}back', 'subgame', 'once we.re in|once we enter|after we enter']

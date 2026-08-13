@@ -1,0 +1,8 @@
+.venv/
+__pycache__/
+*.pyc
+results/*/raw/
+
+# run logs / scheduler scratch
+results/*.log
+results/recovery.sh

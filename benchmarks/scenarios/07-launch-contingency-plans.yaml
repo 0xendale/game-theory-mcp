@@ -1,0 +1,26 @@
+id: launch-contingency-plans
+title: Launch sequencing — how many rival contingency plans?
+persona: BizOps lead wargaming a product launch against a fast-follower rival
+prompt: |
+  We launch first, choosing Aggressive or Soft. Our rival watches, then picks
+  Match or Ignore — and they get to make that pick separately for each of our
+  launch modes.
+
+  Profit in $M (us, rival): Aggressive + Match: (3, 2). Aggressive + Ignore:
+  (4, 1). Soft + Match: (1, 3). Soft + Ignore: (2, 4).
+
+  Two questions for the war-game doc: (1) How many distinct complete
+  contingency plans does the rival have — enumerate them. (2) What actually
+  happens at equilibrium: which launch do we pick, and what does the rival do
+  in each branch?
+expected_tools: [convert_form, solve_backward_induction]
+assertions:
+  - id: four-plans
+    desc: states the rival has 4 complete plans/strategies, not 2
+    any_of: ['\b4\b.{0,30}(plan|strateg)', 'four.{0,20}(plan|strateg)', '(plan|strateg).{0,30}\b4\b']
+  - id: aggressive-spe
+    desc: equilibrium has us launching Aggressive
+    any_of: ['aggressive.{0,60}(equilibrium|best|optimal|chosen|recommend|launch)', '(equilibrium|we).{0,40}aggressive']
+  - id: rival-contingent-response
+    desc: rival Matches after Aggressive and Ignores after Soft
+    any_of: ['match.{0,30}aggressive.{0,80}ignore.{0,30}soft', 'aggressive.{0,30}match.{0,80}soft.{0,30}ignore', 'match.{0,20}(if|after|when).{0,20}aggressive']

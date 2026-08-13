@@ -1,0 +1,2066 @@
+{
+  "budget-standoff|gpt-5-mini|bare": {
+    "trials": 3,
+    "mean_score": 0.778,
+    "mean_tool_calls": 0.0,
+    "errors": 0,
+    "mean_output_tokens": 3197,
+    "per_trial": [
+      {
+        "trial": 0,
+        "score": 1.0,
+        "assertions": {
+          "two-asymmetric-equilibria": true,
+          "mixed-two-thirds": true,
+          "mixed-is-bad": true
+        },
+        "tool_calls": 0,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "solve_mixed_nash",
+          "solve_pure_nash"
+        ],
+        "input_tokens": 196,
+        "output_tokens": 4003,
+        "wall_seconds": 612.62,
+        "error": null
+      },
+      {
+        "trial": 1,
+        "score": 0.6666666666666666,
+        "assertions": {
+          "two-asymmetric-equilibria": true,
+          "mixed-two-thirds": true,
+          "mixed-is-bad": false
+        },
+        "tool_calls": 0,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "solve_mixed_nash",
+          "solve_pure_nash"
+        ],
+        "input_tokens": 196,
+        "output_tokens": 2276,
+        "wall_seconds": 20.86,
+        "error": null
+      },
+      {
+        "trial": 2,
+        "score": 0.6666666666666666,
+        "assertions": {
+          "two-asymmetric-equilibria": true,
+          "mixed-two-thirds": true,
+          "mixed-is-bad": false
+        },
+        "tool_calls": 0,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "solve_mixed_nash",
+          "solve_pure_nash"
+        ],
+        "input_tokens": 196,
+        "output_tokens": 3312,
+        "wall_seconds": 41.49,
+        "error": null
+      }
+    ]
+  },
+  "budget-standoff|gpt-5-mini|mcp": {
+    "trials": 3,
+    "mean_score": 1.0,
+    "mean_tool_calls": 4.0,
+    "errors": 0,
+    "mean_output_tokens": 3105,
+    "per_trial": [
+      {
+        "trial": 0,
+        "score": 1.0,
+        "assertions": {
+          "two-asymmetric-equilibria": true,
+          "mixed-two-thirds": true,
+          "mixed-is-bad": true
+        },
+        "tool_calls": 4,
+        "expected_tools_hit": [
+          "solve_mixed_nash",
+          "solve_pure_nash"
+        ],
+        "expected_tools_missed": [],
+        "input_tokens": 13169,
+        "output_tokens": 2673,
+        "wall_seconds": 631.78,
+        "error": null
+      },
+      {
+        "trial": 1,
+        "score": 1.0,
+        "assertions": {
+          "two-asymmetric-equilibria": true,
+          "mixed-two-thirds": true,
+          "mixed-is-bad": true
+        },
+        "tool_calls": 4,
+        "expected_tools_hit": [
+          "solve_mixed_nash",
+          "solve_pure_nash"
+        ],
+        "expected_tools_missed": [],
+        "input_tokens": 32199,
+        "output_tokens": 3510,
+        "wall_seconds": 63.23,
+        "error": null
+      },
+      {
+        "trial": 2,
+        "score": 1.0,
+        "assertions": {
+          "two-asymmetric-equilibria": true,
+          "mixed-two-thirds": true,
+          "mixed-is-bad": true
+        },
+        "tool_calls": 4,
+        "expected_tools_hit": [
+          "solve_mixed_nash",
+          "solve_pure_nash"
+        ],
+        "expected_tools_missed": [],
+        "input_tokens": 13169,
+        "output_tokens": 3131,
+        "wall_seconds": 63.9,
+        "error": null
+      }
+    ]
+  },
+  "budget-standoff|gpt-5.4-mini|bare": {
+    "trials": 3,
+    "mean_score": 0.667,
+    "mean_tool_calls": 0.0,
+    "errors": 0,
+    "mean_output_tokens": 972,
+    "per_trial": [
+      {
+        "trial": 0,
+        "score": 0.6666666666666666,
+        "assertions": {
+          "two-asymmetric-equilibria": false,
+          "mixed-two-thirds": true,
+          "mixed-is-bad": true
+        },
+        "tool_calls": 0,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "solve_mixed_nash",
+          "solve_pure_nash"
+        ],
+        "input_tokens": 196,
+        "output_tokens": 962,
+        "wall_seconds": 13.37,
+        "error": null
+      },
+      {
+        "trial": 1,
+        "score": 0.6666666666666666,
+        "assertions": {
+          "two-asymmetric-equilibria": false,
+          "mixed-two-thirds": true,
+          "mixed-is-bad": true
+        },
+        "tool_calls": 0,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "solve_mixed_nash",
+          "solve_pure_nash"
+        ],
+        "input_tokens": 196,
+        "output_tokens": 1057,
+        "wall_seconds": 13.52,
+        "error": null
+      },
+      {
+        "trial": 2,
+        "score": 0.6666666666666666,
+        "assertions": {
+          "two-asymmetric-equilibria": false,
+          "mixed-two-thirds": true,
+          "mixed-is-bad": true
+        },
+        "tool_calls": 0,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "solve_mixed_nash",
+          "solve_pure_nash"
+        ],
+        "input_tokens": 196,
+        "output_tokens": 897,
+        "wall_seconds": 6.83,
+        "error": null
+      }
+    ]
+  },
+  "budget-standoff|gpt-5.4-mini|mcp": {
+    "trials": 3,
+    "mean_score": 0.778,
+    "mean_tool_calls": 3.0,
+    "errors": 0,
+    "mean_output_tokens": 625,
+    "per_trial": [
+      {
+        "trial": 0,
+        "score": 0.6666666666666666,
+        "assertions": {
+          "two-asymmetric-equilibria": false,
+          "mixed-two-thirds": true,
+          "mixed-is-bad": true
+        },
+        "tool_calls": 3,
+        "expected_tools_hit": [
+          "solve_mixed_nash",
+          "solve_pure_nash"
+        ],
+        "expected_tools_missed": [],
+        "input_tokens": 13029,
+        "output_tokens": 634,
+        "wall_seconds": 6.94,
+        "error": null
+      },
+      {
+        "trial": 1,
+        "score": 1.0,
+        "assertions": {
+          "two-asymmetric-equilibria": true,
+          "mixed-two-thirds": true,
+          "mixed-is-bad": true
+        },
+        "tool_calls": 3,
+        "expected_tools_hit": [
+          "solve_mixed_nash",
+          "solve_pure_nash"
+        ],
+        "expected_tools_missed": [],
+        "input_tokens": 13029,
+        "output_tokens": 612,
+        "wall_seconds": 6.36,
+        "error": null
+      },
+      {
+        "trial": 2,
+        "score": 0.6666666666666666,
+        "assertions": {
+          "two-asymmetric-equilibria": false,
+          "mixed-two-thirds": true,
+          "mixed-is-bad": true
+        },
+        "tool_calls": 3,
+        "expected_tools_hit": [
+          "solve_mixed_nash",
+          "solve_pure_nash"
+        ],
+        "expected_tools_missed": [],
+        "input_tokens": 13029,
+        "output_tokens": 629,
+        "wall_seconds": 9.35,
+        "error": null
+      }
+    ]
+  },
+  "launch-contingency-plans|gpt-5-mini|bare": {
+    "trials": 3,
+    "mean_score": 1.0,
+    "mean_tool_calls": 0.0,
+    "errors": 0,
+    "mean_output_tokens": 1284,
+    "per_trial": [
+      {
+        "trial": 0,
+        "score": 1.0,
+        "assertions": {
+          "four-plans": true,
+          "aggressive-spe": true,
+          "rival-contingent-response": true
+        },
+        "tool_calls": 0,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "convert_form",
+          "solve_backward_induction"
+        ],
+        "input_tokens": 190,
+        "output_tokens": 1295,
+        "wall_seconds": 33.44,
+        "error": null
+      },
+      {
+        "trial": 1,
+        "score": 1.0,
+        "assertions": {
+          "four-plans": true,
+          "aggressive-spe": true,
+          "rival-contingent-response": true
+        },
+        "tool_calls": 0,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "convert_form",
+          "solve_backward_induction"
+        ],
+        "input_tokens": 190,
+        "output_tokens": 1215,
+        "wall_seconds": 8.63,
+        "error": null
+      },
+      {
+        "trial": 2,
+        "score": 1.0,
+        "assertions": {
+          "four-plans": true,
+          "aggressive-spe": true,
+          "rival-contingent-response": true
+        },
+        "tool_calls": 0,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "convert_form",
+          "solve_backward_induction"
+        ],
+        "input_tokens": 190,
+        "output_tokens": 1342,
+        "wall_seconds": 11.28,
+        "error": null
+      }
+    ]
+  },
+  "launch-contingency-plans|gpt-5-mini|mcp": {
+    "trials": 3,
+    "mean_score": 1.0,
+    "mean_tool_calls": 2.67,
+    "errors": 0,
+    "mean_output_tokens": 3237,
+    "per_trial": [
+      {
+        "trial": 0,
+        "score": 1.0,
+        "assertions": {
+          "four-plans": true,
+          "aggressive-spe": true,
+          "rival-contingent-response": true
+        },
+        "tool_calls": 2,
+        "expected_tools_hit": [
+          "convert_form",
+          "solve_backward_induction"
+        ],
+        "expected_tools_missed": [],
+        "input_tokens": 12938,
+        "output_tokens": 3174,
+        "wall_seconds": 27.48,
+        "error": null
+      },
+      {
+        "trial": 1,
+        "score": 1.0,
+        "assertions": {
+          "four-plans": true,
+          "aggressive-spe": true,
+          "rival-contingent-response": true
+        },
+        "tool_calls": 4,
+        "expected_tools_hit": [
+          "convert_form",
+          "solve_backward_induction"
+        ],
+        "expected_tools_missed": [],
+        "input_tokens": 19456,
+        "output_tokens": 3285,
+        "wall_seconds": 37.81,
+        "error": null
+      },
+      {
+        "trial": 2,
+        "score": 1.0,
+        "assertions": {
+          "four-plans": true,
+          "aggressive-spe": true,
+          "rival-contingent-response": true
+        },
+        "tool_calls": 2,
+        "expected_tools_hit": [
+          "convert_form",
+          "solve_backward_induction"
+        ],
+        "expected_tools_missed": [],
+        "input_tokens": 19895,
+        "output_tokens": 3251,
+        "wall_seconds": 51.24,
+        "error": null
+      }
+    ]
+  },
+  "launch-contingency-plans|gpt-5.4-mini|bare": {
+    "trials": 3,
+    "mean_score": 0.889,
+    "mean_tool_calls": 0.0,
+    "errors": 0,
+    "mean_output_tokens": 567,
+    "per_trial": [
+      {
+        "trial": 0,
+        "score": 1.0,
+        "assertions": {
+          "four-plans": true,
+          "aggressive-spe": true,
+          "rival-contingent-response": true
+        },
+        "tool_calls": 0,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "convert_form",
+          "solve_backward_induction"
+        ],
+        "input_tokens": 190,
+        "output_tokens": 673,
+        "wall_seconds": 8.94,
+        "error": null
+      },
+      {
+        "trial": 1,
+        "score": 1.0,
+        "assertions": {
+          "four-plans": true,
+          "aggressive-spe": true,
+          "rival-contingent-response": true
+        },
+        "tool_calls": 0,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "convert_form",
+          "solve_backward_induction"
+        ],
+        "input_tokens": 190,
+        "output_tokens": 491,
+        "wall_seconds": 4.68,
+        "error": null
+      },
+      {
+        "trial": 2,
+        "score": 0.6666666666666666,
+        "assertions": {
+          "four-plans": true,
+          "aggressive-spe": true,
+          "rival-contingent-response": false
+        },
+        "tool_calls": 0,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "convert_form",
+          "solve_backward_induction"
+        ],
+        "input_tokens": 190,
+        "output_tokens": 536,
+        "wall_seconds": 3.99,
+        "error": null
+      }
+    ]
+  },
+  "launch-contingency-plans|gpt-5.4-mini|mcp": {
+    "trials": 3,
+    "mean_score": 1.0,
+    "mean_tool_calls": 4.0,
+    "errors": 0,
+    "mean_output_tokens": 1127,
+    "per_trial": [
+      {
+        "trial": 0,
+        "score": 1.0,
+        "assertions": {
+          "four-plans": true,
+          "aggressive-spe": true,
+          "rival-contingent-response": true
+        },
+        "tool_calls": 3,
+        "expected_tools_hit": [
+          "convert_form",
+          "solve_backward_induction"
+        ],
+        "expected_tools_missed": [],
+        "input_tokens": 19261,
+        "output_tokens": 987,
+        "wall_seconds": 21.93,
+        "error": null
+      },
+      {
+        "trial": 1,
+        "score": 1.0,
+        "assertions": {
+          "four-plans": true,
+          "aggressive-spe": true,
+          "rival-contingent-response": true
+        },
+        "tool_calls": 4,
+        "expected_tools_hit": [
+          "convert_form",
+          "solve_backward_induction"
+        ],
+        "expected_tools_missed": [],
+        "input_tokens": 26741,
+        "output_tokens": 1115,
+        "wall_seconds": 27.71,
+        "error": null
+      },
+      {
+        "trial": 2,
+        "score": 1.0,
+        "assertions": {
+          "four-plans": true,
+          "aggressive-spe": true,
+          "rival-contingent-response": true
+        },
+        "tool_calls": 5,
+        "expected_tools_hit": [
+          "convert_form",
+          "solve_backward_induction"
+        ],
+        "expected_tools_missed": [],
+        "input_tokens": 32814,
+        "output_tokens": 1280,
+        "wall_seconds": 20.03,
+        "error": null
+      }
+    ]
+  },
+  "market-entry-threat|gpt-5-mini|bare": {
+    "trials": 3,
+    "mean_score": 1.0,
+    "mean_tool_calls": 0.0,
+    "errors": 0,
+    "mean_output_tokens": 2011,
+    "per_trial": [
+      {
+        "trial": 0,
+        "score": 1.0,
+        "assertions": {
+          "recommends-entry": true,
+          "threat-not-credible": true,
+          "backward-reasoning": true
+        },
+        "tool_calls": 0,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "solve_backward_induction"
+        ],
+        "input_tokens": 161,
+        "output_tokens": 2508,
+        "wall_seconds": 15.93,
+        "error": null
+      },
+      {
+        "trial": 1,
+        "score": 1.0,
+        "assertions": {
+          "recommends-entry": true,
+          "threat-not-credible": true,
+          "backward-reasoning": true
+        },
+        "tool_calls": 0,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "solve_backward_induction"
+        ],
+        "input_tokens": 161,
+        "output_tokens": 1384,
+        "wall_seconds": 9.17,
+        "error": null
+      },
+      {
+        "trial": 2,
+        "score": 1.0,
+        "assertions": {
+          "recommends-entry": true,
+          "threat-not-credible": true,
+          "backward-reasoning": true
+        },
+        "tool_calls": 0,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "solve_backward_induction"
+        ],
+        "input_tokens": 161,
+        "output_tokens": 2141,
+        "wall_seconds": 16.0,
+        "error": null
+      }
+    ]
+  },
+  "market-entry-threat|gpt-5-mini|mcp": {
+    "trials": 3,
+    "mean_score": 1.0,
+    "mean_tool_calls": 4.67,
+    "errors": 0,
+    "mean_output_tokens": 6212,
+    "per_trial": [
+      {
+        "trial": 0,
+        "score": 1.0,
+        "assertions": {
+          "recommends-entry": true,
+          "threat-not-credible": true,
+          "backward-reasoning": true
+        },
+        "tool_calls": 6,
+        "expected_tools_hit": [
+          "solve_backward_induction"
+        ],
+        "expected_tools_missed": [],
+        "input_tokens": 28778,
+        "output_tokens": 6104,
+        "wall_seconds": 57.79,
+        "error": null
+      },
+      {
+        "trial": 1,
+        "score": 1.0,
+        "assertions": {
+          "recommends-entry": true,
+          "threat-not-credible": true,
+          "backward-reasoning": true
+        },
+        "tool_calls": 2,
+        "expected_tools_hit": [
+          "solve_backward_induction"
+        ],
+        "expected_tools_missed": [],
+        "input_tokens": 18139,
+        "output_tokens": 2803,
+        "wall_seconds": 38.16,
+        "error": null
+      },
+      {
+        "trial": 2,
+        "score": 1.0,
+        "assertions": {
+          "recommends-entry": true,
+          "threat-not-credible": true,
+          "backward-reasoning": true
+        },
+        "tool_calls": 6,
+        "expected_tools_hit": [
+          "solve_backward_induction"
+        ],
+        "expected_tools_missed": [],
+        "input_tokens": 47078,
+        "output_tokens": 9730,
+        "wall_seconds": 76.29,
+        "error": null
+      }
+    ]
+  },
+  "market-entry-threat|gpt-5.4-mini|bare": {
+    "trials": 3,
+    "mean_score": 0.889,
+    "mean_tool_calls": 0.0,
+    "errors": 0,
+    "mean_output_tokens": 515,
+    "per_trial": [
+      {
+        "trial": 0,
+        "score": 1.0,
+        "assertions": {
+          "recommends-entry": true,
+          "threat-not-credible": true,
+          "backward-reasoning": true
+        },
+        "tool_calls": 0,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "solve_backward_induction"
+        ],
+        "input_tokens": 161,
+        "output_tokens": 603,
+        "wall_seconds": 6.2,
+        "error": null
+      },
+      {
+        "trial": 1,
+        "score": 1.0,
+        "assertions": {
+          "recommends-entry": true,
+          "threat-not-credible": true,
+          "backward-reasoning": true
+        },
+        "tool_calls": 0,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "solve_backward_induction"
+        ],
+        "input_tokens": 161,
+        "output_tokens": 478,
+        "wall_seconds": 4.28,
+        "error": null
+      },
+      {
+        "trial": 2,
+        "score": 0.6666666666666666,
+        "assertions": {
+          "recommends-entry": true,
+          "threat-not-credible": true,
+          "backward-reasoning": false
+        },
+        "tool_calls": 0,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "solve_backward_induction"
+        ],
+        "input_tokens": 161,
+        "output_tokens": 464,
+        "wall_seconds": 3.49,
+        "error": null
+      }
+    ]
+  },
+  "market-entry-threat|gpt-5.4-mini|mcp": {
+    "trials": 3,
+    "mean_score": 0.778,
+    "mean_tool_calls": 3.33,
+    "errors": 0,
+    "mean_output_tokens": 839,
+    "per_trial": [
+      {
+        "trial": 0,
+        "score": 0.6666666666666666,
+        "assertions": {
+          "recommends-entry": true,
+          "threat-not-credible": true,
+          "backward-reasoning": false
+        },
+        "tool_calls": 3,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "solve_backward_induction"
+        ],
+        "input_tokens": 12940,
+        "output_tokens": 815,
+        "wall_seconds": 10.65,
+        "error": null
+      },
+      {
+        "trial": 1,
+        "score": 1.0,
+        "assertions": {
+          "recommends-entry": true,
+          "threat-not-credible": true,
+          "backward-reasoning": true
+        },
+        "tool_calls": 3,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "solve_backward_induction"
+        ],
+        "input_tokens": 12957,
+        "output_tokens": 876,
+        "wall_seconds": 7.89,
+        "error": null
+      },
+      {
+        "trial": 2,
+        "score": 0.6666666666666666,
+        "assertions": {
+          "recommends-entry": true,
+          "threat-not-credible": true,
+          "backward-reasoning": false
+        },
+        "tool_calls": 4,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "solve_backward_induction"
+        ],
+        "input_tokens": 13055,
+        "output_tokens": 826,
+        "wall_seconds": 8.64,
+        "error": null
+      }
+    ]
+  },
+  "perk-pruning-order|gpt-5-mini|bare": {
+    "trials": 3,
+    "mean_score": 0.667,
+    "mean_tool_calls": 0.0,
+    "errors": 0,
+    "mean_output_tokens": 4334,
+    "per_trial": [
+      {
+        "trial": 0,
+        "score": 0.6666666666666666,
+        "assertions": {
+          "order-dependence": true,
+          "strict-keeps-pq": true,
+          "weak-can-prune-more": false
+        },
+        "tool_calls": 0,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "solve_dominance"
+        ],
+        "input_tokens": 209,
+        "output_tokens": 4024,
+        "wall_seconds": 29.02,
+        "error": null
+      },
+      {
+        "trial": 1,
+        "score": 0.6666666666666666,
+        "assertions": {
+          "order-dependence": true,
+          "strict-keeps-pq": true,
+          "weak-can-prune-more": false
+        },
+        "tool_calls": 0,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "solve_dominance"
+        ],
+        "input_tokens": 209,
+        "output_tokens": 4946,
+        "wall_seconds": 34.5,
+        "error": null
+      },
+      {
+        "trial": 2,
+        "score": 0.6666666666666666,
+        "assertions": {
+          "order-dependence": true,
+          "strict-keeps-pq": true,
+          "weak-can-prune-more": false
+        },
+        "tool_calls": 0,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "solve_dominance"
+        ],
+        "input_tokens": 209,
+        "output_tokens": 4031,
+        "wall_seconds": 26.12,
+        "error": null
+      }
+    ]
+  },
+  "perk-pruning-order|gpt-5-mini|mcp": {
+    "trials": 3,
+    "mean_score": 0.889,
+    "mean_tool_calls": 2.33,
+    "errors": 0,
+    "mean_output_tokens": 3505,
+    "per_trial": [
+      {
+        "trial": 0,
+        "score": 1.0,
+        "assertions": {
+          "order-dependence": true,
+          "strict-keeps-pq": true,
+          "weak-can-prune-more": true
+        },
+        "tool_calls": 2,
+        "expected_tools_hit": [
+          "solve_dominance"
+        ],
+        "expected_tools_missed": [],
+        "input_tokens": 18914,
+        "output_tokens": 3129,
+        "wall_seconds": 29.43,
+        "error": null
+      },
+      {
+        "trial": 1,
+        "score": 0.6666666666666666,
+        "assertions": {
+          "order-dependence": true,
+          "strict-keeps-pq": true,
+          "weak-can-prune-more": false
+        },
+        "tool_calls": 4,
+        "expected_tools_hit": [
+          "solve_dominance"
+        ],
+        "expected_tools_missed": [],
+        "input_tokens": 32485,
+        "output_tokens": 5406,
+        "wall_seconds": 67.53,
+        "error": null
+      },
+      {
+        "trial": 2,
+        "score": 1.0,
+        "assertions": {
+          "order-dependence": true,
+          "strict-keeps-pq": true,
+          "weak-can-prune-more": true
+        },
+        "tool_calls": 1,
+        "expected_tools_hit": [
+          "solve_dominance"
+        ],
+        "expected_tools_missed": [],
+        "input_tokens": 12195,
+        "output_tokens": 1980,
+        "wall_seconds": 22.41,
+        "error": null
+      }
+    ]
+  },
+  "perk-pruning-order|gpt-5.4-mini|bare": {
+    "trials": 3,
+    "mean_score": 0.667,
+    "mean_tool_calls": 0.0,
+    "errors": 0,
+    "mean_output_tokens": 674,
+    "per_trial": [
+      {
+        "trial": 0,
+        "score": 0.6666666666666666,
+        "assertions": {
+          "order-dependence": true,
+          "strict-keeps-pq": true,
+          "weak-can-prune-more": false
+        },
+        "tool_calls": 0,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "solve_dominance"
+        ],
+        "input_tokens": 209,
+        "output_tokens": 661,
+        "wall_seconds": 5.96,
+        "error": null
+      },
+      {
+        "trial": 1,
+        "score": 0.6666666666666666,
+        "assertions": {
+          "order-dependence": true,
+          "strict-keeps-pq": true,
+          "weak-can-prune-more": false
+        },
+        "tool_calls": 0,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "solve_dominance"
+        ],
+        "input_tokens": 209,
+        "output_tokens": 612,
+        "wall_seconds": 5.93,
+        "error": null
+      },
+      {
+        "trial": 2,
+        "score": 0.6666666666666666,
+        "assertions": {
+          "order-dependence": true,
+          "strict-keeps-pq": true,
+          "weak-can-prune-more": false
+        },
+        "tool_calls": 0,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "solve_dominance"
+        ],
+        "input_tokens": 209,
+        "output_tokens": 749,
+        "wall_seconds": 12.4,
+        "error": null
+      }
+    ]
+  },
+  "perk-pruning-order|gpt-5.4-mini|mcp": {
+    "trials": 3,
+    "mean_score": 0.778,
+    "mean_tool_calls": 2.33,
+    "errors": 0,
+    "mean_output_tokens": 547,
+    "per_trial": [
+      {
+        "trial": 0,
+        "score": 1.0,
+        "assertions": {
+          "order-dependence": true,
+          "strict-keeps-pq": true,
+          "weak-can-prune-more": true
+        },
+        "tool_calls": 4,
+        "expected_tools_hit": [
+          "solve_dominance"
+        ],
+        "expected_tools_missed": [],
+        "input_tokens": 13424,
+        "output_tokens": 762,
+        "wall_seconds": 6.76,
+        "error": null
+      },
+      {
+        "trial": 1,
+        "score": 0.6666666666666666,
+        "assertions": {
+          "order-dependence": true,
+          "strict-keeps-pq": true,
+          "weak-can-prune-more": false
+        },
+        "tool_calls": 1,
+        "expected_tools_hit": [
+          "solve_dominance"
+        ],
+        "expected_tools_missed": [],
+        "input_tokens": 12075,
+        "output_tokens": 381,
+        "wall_seconds": 5.55,
+        "error": null
+      },
+      {
+        "trial": 2,
+        "score": 0.6666666666666666,
+        "assertions": {
+          "order-dependence": true,
+          "strict-keeps-pq": true,
+          "weak-can-prune-more": false
+        },
+        "tool_calls": 2,
+        "expected_tools_hit": [
+          "solve_dominance"
+        ],
+        "expected_tools_missed": [],
+        "input_tokens": 12210,
+        "output_tokens": 497,
+        "wall_seconds": 6.29,
+        "error": null
+      }
+    ]
+  },
+  "platform-shift-coordination|gpt-5-mini|bare": {
+    "trials": 3,
+    "mean_score": 0.778,
+    "mean_tool_calls": 0.0,
+    "errors": 0,
+    "mean_output_tokens": 2913,
+    "per_trial": [
+      {
+        "trial": 0,
+        "score": 0.6666666666666666,
+        "assertions": {
+          "two-equilibria": false,
+          "pareto-better": true,
+          "risk-story": true
+        },
+        "tool_calls": 0,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "analyze_payoff_structure",
+          "solve_pure_nash"
+        ],
+        "input_tokens": 172,
+        "output_tokens": 2637,
+        "wall_seconds": 23.61,
+        "error": null
+      },
+      {
+        "trial": 1,
+        "score": 1.0,
+        "assertions": {
+          "two-equilibria": true,
+          "pareto-better": true,
+          "risk-story": true
+        },
+        "tool_calls": 0,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "analyze_payoff_structure",
+          "solve_pure_nash"
+        ],
+        "input_tokens": 172,
+        "output_tokens": 3393,
+        "wall_seconds": 14.28,
+        "error": null
+      },
+      {
+        "trial": 2,
+        "score": 0.6666666666666666,
+        "assertions": {
+          "two-equilibria": false,
+          "pareto-better": true,
+          "risk-story": true
+        },
+        "tool_calls": 0,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "analyze_payoff_structure",
+          "solve_pure_nash"
+        ],
+        "input_tokens": 172,
+        "output_tokens": 2709,
+        "wall_seconds": 12.8,
+        "error": null
+      }
+    ]
+  },
+  "platform-shift-coordination|gpt-5-mini|mcp": {
+    "trials": 3,
+    "mean_score": 1.0,
+    "mean_tool_calls": 4.0,
+    "errors": 0,
+    "mean_output_tokens": 3323,
+    "per_trial": [
+      {
+        "trial": 0,
+        "score": 1.0,
+        "assertions": {
+          "two-equilibria": true,
+          "pareto-better": true,
+          "risk-story": true
+        },
+        "tool_calls": 4,
+        "expected_tools_hit": [
+          "analyze_payoff_structure",
+          "solve_pure_nash"
+        ],
+        "expected_tools_missed": [],
+        "input_tokens": 13015,
+        "output_tokens": 3068,
+        "wall_seconds": 36.63,
+        "error": null
+      },
+      {
+        "trial": 1,
+        "score": 1.0,
+        "assertions": {
+          "two-equilibria": true,
+          "pareto-better": true,
+          "risk-story": true
+        },
+        "tool_calls": 4,
+        "expected_tools_hit": [
+          "analyze_payoff_structure",
+          "solve_pure_nash"
+        ],
+        "expected_tools_missed": [],
+        "input_tokens": 12949,
+        "output_tokens": 3167,
+        "wall_seconds": 26.7,
+        "error": null
+      },
+      {
+        "trial": 2,
+        "score": 1.0,
+        "assertions": {
+          "two-equilibria": true,
+          "pareto-better": true,
+          "risk-story": true
+        },
+        "tool_calls": 4,
+        "expected_tools_hit": [
+          "analyze_payoff_structure",
+          "solve_pure_nash"
+        ],
+        "expected_tools_missed": [],
+        "input_tokens": 20177,
+        "output_tokens": 3735,
+        "wall_seconds": 36.39,
+        "error": null
+      }
+    ]
+  },
+  "platform-shift-coordination|gpt-5.4-mini|bare": {
+    "trials": 3,
+    "mean_score": 0.667,
+    "mean_tool_calls": 0.0,
+    "errors": 0,
+    "mean_output_tokens": 691,
+    "per_trial": [
+      {
+        "trial": 0,
+        "score": 0.3333333333333333,
+        "assertions": {
+          "two-equilibria": false,
+          "pareto-better": false,
+          "risk-story": true
+        },
+        "tool_calls": 0,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "analyze_payoff_structure",
+          "solve_pure_nash"
+        ],
+        "input_tokens": 172,
+        "output_tokens": 635,
+        "wall_seconds": 4.37,
+        "error": null
+      },
+      {
+        "trial": 1,
+        "score": 0.6666666666666666,
+        "assertions": {
+          "two-equilibria": false,
+          "pareto-better": true,
+          "risk-story": true
+        },
+        "tool_calls": 0,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "analyze_payoff_structure",
+          "solve_pure_nash"
+        ],
+        "input_tokens": 172,
+        "output_tokens": 710,
+        "wall_seconds": 4.6,
+        "error": null
+      },
+      {
+        "trial": 2,
+        "score": 1.0,
+        "assertions": {
+          "two-equilibria": true,
+          "pareto-better": true,
+          "risk-story": true
+        },
+        "tool_calls": 0,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "analyze_payoff_structure",
+          "solve_pure_nash"
+        ],
+        "input_tokens": 172,
+        "output_tokens": 729,
+        "wall_seconds": 4.59,
+        "error": null
+      }
+    ]
+  },
+  "platform-shift-coordination|gpt-5.4-mini|mcp": {
+    "trials": 3,
+    "mean_score": 0.667,
+    "mean_tool_calls": 2.67,
+    "errors": 0,
+    "mean_output_tokens": 594,
+    "per_trial": [
+      {
+        "trial": 0,
+        "score": 0.6666666666666666,
+        "assertions": {
+          "two-equilibria": false,
+          "pareto-better": true,
+          "risk-story": true
+        },
+        "tool_calls": 2,
+        "expected_tools_hit": [
+          "analyze_payoff_structure",
+          "solve_pure_nash"
+        ],
+        "expected_tools_missed": [],
+        "input_tokens": 12291,
+        "output_tokens": 501,
+        "wall_seconds": 9.35,
+        "error": null
+      },
+      {
+        "trial": 1,
+        "score": 0.6666666666666666,
+        "assertions": {
+          "two-equilibria": false,
+          "pareto-better": true,
+          "risk-story": true
+        },
+        "tool_calls": 3,
+        "expected_tools_hit": [
+          "analyze_payoff_structure",
+          "solve_pure_nash"
+        ],
+        "expected_tools_missed": [],
+        "input_tokens": 12851,
+        "output_tokens": 636,
+        "wall_seconds": 9.26,
+        "error": null
+      },
+      {
+        "trial": 2,
+        "score": 0.6666666666666666,
+        "assertions": {
+          "two-equilibria": false,
+          "pareto-better": true,
+          "risk-story": true
+        },
+        "tool_calls": 3,
+        "expected_tools_hit": [
+          "analyze_payoff_structure",
+          "solve_pure_nash"
+        ],
+        "expected_tools_missed": [],
+        "input_tokens": 12851,
+        "output_tokens": 645,
+        "wall_seconds": 7.39,
+        "error": null
+      }
+    ]
+  },
+  "price-war-collusion|gpt-5-mini|bare": {
+    "trials": 3,
+    "mean_score": 0.667,
+    "mean_tool_calls": 0.0,
+    "errors": 0,
+    "mean_output_tokens": 2148,
+    "per_trial": [
+      {
+        "trial": 0,
+        "score": 0.6666666666666666,
+        "assertions": {
+          "critical-delta": true,
+          "stage-equilibrium": false,
+          "patience-interpretation": true
+        },
+        "tool_calls": 0,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "analyze_repeated_game"
+        ],
+        "input_tokens": 227,
+        "output_tokens": 1981,
+        "wall_seconds": 21.02,
+        "error": null
+      },
+      {
+        "trial": 1,
+        "score": 0.6666666666666666,
+        "assertions": {
+          "critical-delta": true,
+          "stage-equilibrium": false,
+          "patience-interpretation": true
+        },
+        "tool_calls": 0,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "analyze_repeated_game"
+        ],
+        "input_tokens": 227,
+        "output_tokens": 2357,
+        "wall_seconds": 16.35,
+        "error": null
+      },
+      {
+        "trial": 2,
+        "score": 0.6666666666666666,
+        "assertions": {
+          "critical-delta": true,
+          "stage-equilibrium": false,
+          "patience-interpretation": true
+        },
+        "tool_calls": 0,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "analyze_repeated_game"
+        ],
+        "input_tokens": 227,
+        "output_tokens": 2106,
+        "wall_seconds": 19.03,
+        "error": null
+      }
+    ]
+  },
+  "price-war-collusion|gpt-5-mini|mcp": {
+    "trials": 3,
+    "mean_score": 1.0,
+    "mean_tool_calls": 1.0,
+    "errors": 0,
+    "mean_output_tokens": 2363,
+    "per_trial": [
+      {
+        "trial": 0,
+        "score": 1.0,
+        "assertions": {
+          "critical-delta": true,
+          "stage-equilibrium": true,
+          "patience-interpretation": true
+        },
+        "tool_calls": 1,
+        "expected_tools_hit": [
+          "analyze_repeated_game"
+        ],
+        "expected_tools_missed": [],
+        "input_tokens": 12002,
+        "output_tokens": 2106,
+        "wall_seconds": 21.3,
+        "error": null
+      },
+      {
+        "trial": 1,
+        "score": 1.0,
+        "assertions": {
+          "critical-delta": true,
+          "stage-equilibrium": true,
+          "patience-interpretation": true
+        },
+        "tool_calls": 1,
+        "expected_tools_hit": [
+          "analyze_repeated_game"
+        ],
+        "expected_tools_missed": [],
+        "input_tokens": 12003,
+        "output_tokens": 2671,
+        "wall_seconds": 24.37,
+        "error": null
+      },
+      {
+        "trial": 2,
+        "score": 1.0,
+        "assertions": {
+          "critical-delta": true,
+          "stage-equilibrium": true,
+          "patience-interpretation": true
+        },
+        "tool_calls": 1,
+        "expected_tools_hit": [
+          "analyze_repeated_game"
+        ],
+        "expected_tools_missed": [],
+        "input_tokens": 12092,
+        "output_tokens": 2311,
+        "wall_seconds": 20.12,
+        "error": null
+      }
+    ]
+  },
+  "price-war-collusion|gpt-5.4-mini|bare": {
+    "trials": 3,
+    "mean_score": 0.778,
+    "mean_tool_calls": 0.0,
+    "errors": 0,
+    "mean_output_tokens": 691,
+    "per_trial": [
+      {
+        "trial": 0,
+        "score": 1.0,
+        "assertions": {
+          "critical-delta": true,
+          "stage-equilibrium": true,
+          "patience-interpretation": true
+        },
+        "tool_calls": 0,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "analyze_repeated_game"
+        ],
+        "input_tokens": 227,
+        "output_tokens": 770,
+        "wall_seconds": 5.52,
+        "error": null
+      },
+      {
+        "trial": 1,
+        "score": 0.6666666666666666,
+        "assertions": {
+          "critical-delta": true,
+          "stage-equilibrium": false,
+          "patience-interpretation": true
+        },
+        "tool_calls": 0,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "analyze_repeated_game"
+        ],
+        "input_tokens": 227,
+        "output_tokens": 610,
+        "wall_seconds": 4.33,
+        "error": null
+      },
+      {
+        "trial": 2,
+        "score": 0.6666666666666666,
+        "assertions": {
+          "critical-delta": true,
+          "stage-equilibrium": false,
+          "patience-interpretation": true
+        },
+        "tool_calls": 0,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "analyze_repeated_game"
+        ],
+        "input_tokens": 227,
+        "output_tokens": 693,
+        "wall_seconds": 4.54,
+        "error": null
+      }
+    ]
+  },
+  "price-war-collusion|gpt-5.4-mini|mcp": {
+    "trials": 3,
+    "mean_score": 0.778,
+    "mean_tool_calls": 1.0,
+    "errors": 0,
+    "mean_output_tokens": 420,
+    "per_trial": [
+      {
+        "trial": 0,
+        "score": 0.6666666666666666,
+        "assertions": {
+          "critical-delta": true,
+          "stage-equilibrium": false,
+          "patience-interpretation": true
+        },
+        "tool_calls": 1,
+        "expected_tools_hit": [
+          "analyze_repeated_game"
+        ],
+        "expected_tools_missed": [],
+        "input_tokens": 11988,
+        "output_tokens": 429,
+        "wall_seconds": 6.19,
+        "error": null
+      },
+      {
+        "trial": 1,
+        "score": 0.6666666666666666,
+        "assertions": {
+          "critical-delta": true,
+          "stage-equilibrium": false,
+          "patience-interpretation": true
+        },
+        "tool_calls": 1,
+        "expected_tools_hit": [
+          "analyze_repeated_game"
+        ],
+        "expected_tools_missed": [],
+        "input_tokens": 11986,
+        "output_tokens": 398,
+        "wall_seconds": 6.82,
+        "error": null
+      },
+      {
+        "trial": 2,
+        "score": 1.0,
+        "assertions": {
+          "critical-delta": true,
+          "stage-equilibrium": true,
+          "patience-interpretation": true
+        },
+        "tool_calls": 1,
+        "expected_tools_hit": [
+          "analyze_repeated_game"
+        ],
+        "expected_tools_missed": [],
+        "input_tokens": 11984,
+        "output_tokens": 434,
+        "wall_seconds": 8.98,
+        "error": null
+      }
+    ]
+  },
+  "promo-calendar-mix|gpt-5-mini|bare": {
+    "trials": 3,
+    "mean_score": 1.0,
+    "mean_tool_calls": 0.0,
+    "errors": 0,
+    "mean_output_tokens": 2686,
+    "per_trial": [
+      {
+        "trial": 0,
+        "score": 1.0,
+        "assertions": {
+          "two-thirds": true,
+          "one-third": true,
+          "mixed-equilibrium": true
+        },
+        "tool_calls": 0,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "solve_mixed_nash"
+        ],
+        "input_tokens": 183,
+        "output_tokens": 2256,
+        "wall_seconds": 13.92,
+        "error": null
+      },
+      {
+        "trial": 1,
+        "score": 1.0,
+        "assertions": {
+          "two-thirds": true,
+          "one-third": true,
+          "mixed-equilibrium": true
+        },
+        "tool_calls": 0,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "solve_mixed_nash"
+        ],
+        "input_tokens": 183,
+        "output_tokens": 2843,
+        "wall_seconds": 21.77,
+        "error": null
+      },
+      {
+        "trial": 2,
+        "score": 1.0,
+        "assertions": {
+          "two-thirds": true,
+          "one-third": true,
+          "mixed-equilibrium": true
+        },
+        "tool_calls": 0,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "solve_mixed_nash"
+        ],
+        "input_tokens": 183,
+        "output_tokens": 2958,
+        "wall_seconds": 26.68,
+        "error": null
+      }
+    ]
+  },
+  "promo-calendar-mix|gpt-5-mini|mcp": {
+    "trials": 3,
+    "mean_score": 1.0,
+    "mean_tool_calls": 3.0,
+    "errors": 0,
+    "mean_output_tokens": 4257,
+    "per_trial": [
+      {
+        "trial": 0,
+        "score": 1.0,
+        "assertions": {
+          "two-thirds": true,
+          "one-third": true,
+          "mixed-equilibrium": true
+        },
+        "tool_calls": 2,
+        "expected_tools_hit": [
+          "solve_mixed_nash"
+        ],
+        "expected_tools_missed": [],
+        "input_tokens": 18887,
+        "output_tokens": 4490,
+        "wall_seconds": 24.66,
+        "error": null
+      },
+      {
+        "trial": 1,
+        "score": 1.0,
+        "assertions": {
+          "two-thirds": true,
+          "one-third": true,
+          "mixed-equilibrium": true
+        },
+        "tool_calls": 4,
+        "expected_tools_hit": [
+          "solve_mixed_nash"
+        ],
+        "expected_tools_missed": [],
+        "input_tokens": 13014,
+        "output_tokens": 2933,
+        "wall_seconds": 14.83,
+        "error": null
+      },
+      {
+        "trial": 2,
+        "score": 1.0,
+        "assertions": {
+          "two-thirds": true,
+          "one-third": true,
+          "mixed-equilibrium": true
+        },
+        "tool_calls": 3,
+        "expected_tools_hit": [
+          "solve_mixed_nash"
+        ],
+        "expected_tools_missed": [],
+        "input_tokens": 12893,
+        "output_tokens": 5347,
+        "wall_seconds": 56.5,
+        "error": null
+      }
+    ]
+  },
+  "promo-calendar-mix|gpt-5.4-mini|bare": {
+    "trials": 3,
+    "mean_score": 1.0,
+    "mean_tool_calls": 0.0,
+    "errors": 0,
+    "mean_output_tokens": 700,
+    "per_trial": [
+      {
+        "trial": 0,
+        "score": 1.0,
+        "assertions": {
+          "two-thirds": true,
+          "one-third": true,
+          "mixed-equilibrium": true
+        },
+        "tool_calls": 0,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "solve_mixed_nash"
+        ],
+        "input_tokens": 183,
+        "output_tokens": 824,
+        "wall_seconds": 5.72,
+        "error": null
+      },
+      {
+        "trial": 1,
+        "score": 1.0,
+        "assertions": {
+          "two-thirds": true,
+          "one-third": true,
+          "mixed-equilibrium": true
+        },
+        "tool_calls": 0,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "solve_mixed_nash"
+        ],
+        "input_tokens": 183,
+        "output_tokens": 709,
+        "wall_seconds": 4.84,
+        "error": null
+      },
+      {
+        "trial": 2,
+        "score": 1.0,
+        "assertions": {
+          "two-thirds": true,
+          "one-third": true,
+          "mixed-equilibrium": true
+        },
+        "tool_calls": 0,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "solve_mixed_nash"
+        ],
+        "input_tokens": 183,
+        "output_tokens": 567,
+        "wall_seconds": 4.41,
+        "error": null
+      }
+    ]
+  },
+  "promo-calendar-mix|gpt-5.4-mini|mcp": {
+    "trials": 3,
+    "mean_score": 1.0,
+    "mean_tool_calls": 2.67,
+    "errors": 0,
+    "mean_output_tokens": 512,
+    "per_trial": [
+      {
+        "trial": 0,
+        "score": 1.0,
+        "assertions": {
+          "two-thirds": true,
+          "one-third": true,
+          "mixed-equilibrium": true
+        },
+        "tool_calls": 1,
+        "expected_tools_hit": [
+          "solve_mixed_nash"
+        ],
+        "expected_tools_missed": [],
+        "input_tokens": 12102,
+        "output_tokens": 283,
+        "wall_seconds": 5.35,
+        "error": null
+      },
+      {
+        "trial": 1,
+        "score": 1.0,
+        "assertions": {
+          "two-thirds": true,
+          "one-third": true,
+          "mixed-equilibrium": true
+        },
+        "tool_calls": 4,
+        "expected_tools_hit": [
+          "solve_mixed_nash"
+        ],
+        "expected_tools_missed": [],
+        "input_tokens": 13066,
+        "output_tokens": 611,
+        "wall_seconds": 6.28,
+        "error": null
+      },
+      {
+        "trial": 2,
+        "score": 1.0,
+        "assertions": {
+          "two-thirds": true,
+          "one-third": true,
+          "mixed-equilibrium": true
+        },
+        "tool_calls": 3,
+        "expected_tools_hit": [
+          "solve_mixed_nash"
+        ],
+        "expected_tools_missed": [],
+        "input_tokens": 26442,
+        "output_tokens": 642,
+        "wall_seconds": 11.2,
+        "error": null
+      }
+    ]
+  },
+  "ranked-pick-rates|gpt-5-mini|bare": {
+    "trials": 3,
+    "mean_score": 1.0,
+    "mean_tool_calls": 0.0,
+    "errors": 0,
+    "mean_output_tokens": 2185,
+    "per_trial": [
+      {
+        "trial": 0,
+        "score": 1.0,
+        "assertions": {
+          "no-pure-best": true,
+          "fifty-fifty": true,
+          "zero-sum": true
+        },
+        "tool_calls": 0,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "analyze_payoff_structure",
+          "solve_mixed_nash"
+        ],
+        "input_tokens": 197,
+        "output_tokens": 2050,
+        "wall_seconds": 13.46,
+        "error": null
+      },
+      {
+        "trial": 1,
+        "score": 1.0,
+        "assertions": {
+          "no-pure-best": true,
+          "fifty-fifty": true,
+          "zero-sum": true
+        },
+        "tool_calls": 0,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "analyze_payoff_structure",
+          "solve_mixed_nash"
+        ],
+        "input_tokens": 197,
+        "output_tokens": 2877,
+        "wall_seconds": 35.94,
+        "error": null
+      },
+      {
+        "trial": 2,
+        "score": 1.0,
+        "assertions": {
+          "no-pure-best": true,
+          "fifty-fifty": true,
+          "zero-sum": true
+        },
+        "tool_calls": 0,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "analyze_payoff_structure",
+          "solve_mixed_nash"
+        ],
+        "input_tokens": 197,
+        "output_tokens": 1628,
+        "wall_seconds": 11.42,
+        "error": null
+      }
+    ]
+  },
+  "ranked-pick-rates|gpt-5-mini|mcp": {
+    "trials": 3,
+    "mean_score": 1.0,
+    "mean_tool_calls": 6.0,
+    "errors": 0,
+    "mean_output_tokens": 3541,
+    "per_trial": [
+      {
+        "trial": 0,
+        "score": 1.0,
+        "assertions": {
+          "no-pure-best": true,
+          "fifty-fifty": true,
+          "zero-sum": true
+        },
+        "tool_calls": 7,
+        "expected_tools_hit": [
+          "analyze_payoff_structure",
+          "solve_mixed_nash"
+        ],
+        "expected_tools_missed": [],
+        "input_tokens": 28419,
+        "output_tokens": 3652,
+        "wall_seconds": 49.14,
+        "error": null
+      },
+      {
+        "trial": 1,
+        "score": 1.0,
+        "assertions": {
+          "no-pure-best": true,
+          "fifty-fifty": true,
+          "zero-sum": true
+        },
+        "tool_calls": 6,
+        "expected_tools_hit": [
+          "analyze_payoff_structure",
+          "solve_mixed_nash"
+        ],
+        "expected_tools_missed": [],
+        "input_tokens": 40055,
+        "output_tokens": 4495,
+        "wall_seconds": 54.1,
+        "error": null
+      },
+      {
+        "trial": 2,
+        "score": 1.0,
+        "assertions": {
+          "no-pure-best": true,
+          "fifty-fifty": true,
+          "zero-sum": true
+        },
+        "tool_calls": 5,
+        "expected_tools_hit": [
+          "analyze_payoff_structure",
+          "solve_mixed_nash"
+        ],
+        "expected_tools_missed": [],
+        "input_tokens": 13302,
+        "output_tokens": 2477,
+        "wall_seconds": 21.16,
+        "error": null
+      }
+    ]
+  },
+  "ranked-pick-rates|gpt-5.4-mini|bare": {
+    "trials": 3,
+    "mean_score": 1.0,
+    "mean_tool_calls": 0.0,
+    "errors": 0,
+    "mean_output_tokens": 820,
+    "per_trial": [
+      {
+        "trial": 0,
+        "score": 1.0,
+        "assertions": {
+          "no-pure-best": true,
+          "fifty-fifty": true,
+          "zero-sum": true
+        },
+        "tool_calls": 0,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "analyze_payoff_structure",
+          "solve_mixed_nash"
+        ],
+        "input_tokens": 197,
+        "output_tokens": 890,
+        "wall_seconds": 5.56,
+        "error": null
+      },
+      {
+        "trial": 1,
+        "score": 1.0,
+        "assertions": {
+          "no-pure-best": true,
+          "fifty-fifty": true,
+          "zero-sum": true
+        },
+        "tool_calls": 0,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "analyze_payoff_structure",
+          "solve_mixed_nash"
+        ],
+        "input_tokens": 197,
+        "output_tokens": 766,
+        "wall_seconds": 7.01,
+        "error": null
+      },
+      {
+        "trial": 2,
+        "score": 1.0,
+        "assertions": {
+          "no-pure-best": true,
+          "fifty-fifty": true,
+          "zero-sum": true
+        },
+        "tool_calls": 0,
+        "expected_tools_hit": [],
+        "expected_tools_missed": [
+          "analyze_payoff_structure",
+          "solve_mixed_nash"
+        ],
+        "input_tokens": 197,
+        "output_tokens": 803,
+        "wall_seconds": 5.01,
+        "error": null
+      }
+    ]
+  },
+  "ranked-pick-rates|gpt-5.4-mini|mcp": {
+    "trials": 3,
+    "mean_score": 1.0,
+    "mean_tool_calls": 4.0,
+    "errors": 0,
+    "mean_output_tokens": 607,
+    "per_trial": [
+      {
+        "trial": 0,
+        "score": 1.0,
+        "assertions": {
+          "no-pure-best": true,
+          "fifty-fifty": true,
+          "zero-sum": true
+        },
+        "tool_calls": 4,
+        "expected_tools_hit": [
+          "analyze_payoff_structure",
+          "solve_mixed_nash"
+        ],
+        "expected_tools_missed": [],
+        "input_tokens": 12968,
+        "output_tokens": 637,
+        "wall_seconds": 7.27,
+        "error": null
+      },
+      {
+        "trial": 1,
+        "score": 1.0,
+        "assertions": {
+          "no-pure-best": true,
+          "fifty-fifty": true,
+          "zero-sum": true
+        },
+        "tool_calls": 4,
+        "expected_tools_hit": [
+          "analyze_payoff_structure",
+          "solve_mixed_nash"
+        ],
+        "expected_tools_missed": [],
+        "input_tokens": 12968,
+        "output_tokens": 553,
+        "wall_seconds": 6.32,
+        "error": null
+      },
+      {
+        "trial": 2,
+        "score": 1.0,
+        "assertions": {
+          "no-pure-best": true,
+          "fifty-fifty": true,
+          "zero-sum": true
+        },
+        "tool_calls": 4,
+        "expected_tools_hit": [
+          "analyze_payoff_structure",
+          "solve_mixed_nash"
+        ],
+        "expected_tools_missed": [],
+        "input_tokens": 12968,
+        "output_tokens": 631,
+        "wall_seconds": 8.72,
+        "error": null
+      }
+    ]
+  }
+}

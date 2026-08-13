@@ -1,0 +1,31 @@
+id: price-war-collusion
+title: Subscription price war — can holding price hold up?
+persona: Growth marketing lead at a coffee subscription startup
+prompt: |
+  I run growth at a coffee subscription startup. Every week, we and our main
+  rival each pick one of two prices: hold at the current price, or undercut by
+  $2. Weekly profit in $k: if we both hold, we each make 8. If one undercuts
+  while the other holds, the undercutter makes 10 and the holder makes 0. If we
+  both undercut, we each make 2.
+
+  This repeats every week, indefinitely, and we both watch each other's pricing
+  page. A consultant proposed this arrangement: both hold, and if either side
+  ever undercuts, both switch to undercutting forever.
+
+  My question: how patient do both sides need to be for "both hold" to actually
+  hold up under that arrangement? I want the exact threshold on the weekly
+  discount factor, and a plain-English explanation of why.
+expected_tools: [analyze_repeated_game]
+assertions:
+  - id: critical-delta
+    desc: states the exact critical discount factor 1/4
+    any_of: ['1/4', '0\.25', '\b25%']
+  - id: stage-equilibrium
+    desc: notes both-undercut is the one-shot/stage-game equilibrium the threat reverts to
+    any_of:
+      - 'both undercut.{0,80}(equilibrium|one-shot|stage|single|fallback|revert|punish)'
+      - '(equilibrium|one-shot|stage|punishment|revert).{0,80}both undercut'
+      - 'mutual undercut'
+  - id: patience-interpretation
+    desc: interprets the threshold as a patience/weight-on-the-future condition
+    any_of: ['patien', 'discount factor', 'weight.{0,30}future', 'value.{0,20}future']

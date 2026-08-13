@@ -1,0 +1,25 @@
+id: promo-calendar-mix
+title: Promo calendar collision — the exact rotation
+persona: Partnerships marketing manager coordinating with an embargoed partner
+prompt: |
+  We and a partner brand share one email list. Each of us independently picks
+  a promo week: week A or week B. We can't coordinate — there's an embargo on
+  talking to each other this quarter.
+
+  Payoffs in qualified leads (thousands): if we both pick week A, we get 2 and
+  they get 1. If we both pick week B, we get 1 and they get 2. If we pick
+  different weeks, the list gets spam fatigue and we both get 0.
+
+  Leadership asks: is there a sensible randomized rotation, and if so, what are
+  the exact probabilities each side should use? They want numbers, not vibes.
+expected_tools: [solve_mixed_nash]
+assertions:
+  - id: two-thirds
+    desc: the side favored in week A plays it with probability 2/3
+    any_of: ['2/3', '0\.6{2,}', '66\.[67]', '\b67%']
+  - id: one-third
+    desc: the complementary probability 1/3 appears
+    any_of: ['1/3', '0\.3{2,}', '33\.[34]', '\b33%']
+  - id: mixed-equilibrium
+    desc: frames the answer as a mixed-strategy equilibrium, not an arbitrary coin flip
+    any_of: ['mixed', 'indifferen', 'randomi[sz]e.{0,30}(equilibrium|stable|best)']

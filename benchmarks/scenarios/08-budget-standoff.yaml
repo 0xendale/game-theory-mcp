@@ -1,0 +1,24 @@
+id: budget-standoff
+title: Budget standoff — escalate or yield?
+persona: Engineering manager in a roadmap fight with the design lead
+prompt: |
+  Every quarter, me (engineering) and the design lead fight over the roadmap.
+  Each of us can escalate to the VP or yield. Quarterly outcome scores (me,
+  design): if we both escalate, the VP is furious at us both: (-2, -2). If I
+  escalate and design yields, I win the roadmap: (2, -1). If I yield and
+  design escalates: (-1, 2). If we both yield, status quo: (0, 0).
+
+  What are the stable outcomes here? And if neither of us can credibly commit
+  to a stance going in, is there a rational randomized play — with exact
+  probabilities? What do we each expect to get under that play?
+expected_tools: [solve_pure_nash, solve_mixed_nash]
+assertions:
+  - id: two-asymmetric-equilibria
+    desc: finds the two asymmetric pure equilibria (one escalates, the other yields)
+    any_of: ['two (pure )?(Nash )?equilibri', 'one (escalates|side escalates).{0,40}(other|yields)', 'asymmetric']
+  - id: mixed-two-thirds
+    desc: mixed equilibrium escalates with probability 2/3
+    any_of: ['2/3', '0\.6{2,}', '66\.[67]', '\b67%']
+  - id: mixed-is-bad
+    desc: notes the mixed play has negative expected value (-2/3), worse than both yielding
+    any_of: ['-2/3', 'negative', 'worse than', 'below (the )?(0|status quo)']

@@ -1,0 +1,6 @@
+[project]
+name = "gt-mcp-benchmarks"
+version = "0.1.0"
+description = "Benchmark harness: LLM with vs without game-theory-mcp"
+requires-python = ">=3.11"
+dependencies = ["openai", "mcp", "pyyaml", "pydantic"]
